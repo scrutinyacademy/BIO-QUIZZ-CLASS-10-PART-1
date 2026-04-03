@@ -1,0 +1,1233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Class 10 Biology Quiz — Chapters 1–5 | Scrutiny Academy</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ─── TOKENS ─────────────────────────────────────────── */
+:root {
+  --bg:       #07090f;
+  --surface:  #0d1117;
+  --card:     #131820;
+  --card2:    #181f2a;
+  --border:   rgba(255,255,255,0.07);
+  --border2:  rgba(255,255,255,0.12);
+  --text:     #e8edf5;
+  --muted:    #6b7a90;
+  --dim:      #3a4455;
+
+  --ch1:  #f59e0b;   /* Nutrition      – amber   */
+  --ch2:  #38bdf8;   /* Respiration    – sky     */
+  --ch3:  #f43f5e;   /* Transportation – rose    */
+  --ch4:  #a78bfa;   /* Excretion      – violet  */
+  --ch5:  #34d399;   /* Coord.         – emerald */
+
+  --correct: #22c55e;
+  --wrong:   #ef4444;
+  --radius:  14px;
+  --shadow:  0 8px 32px rgba(0,0,0,.45);
+}
+
+/* ─── RESET ──────────────────────────────────────────── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:16px}
+body{
+  font-family:'DM Sans',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+  overflow-x:hidden;
+}
+button{cursor:pointer;font-family:inherit;border:none;background:none}
+a{color:inherit;text-decoration:none}
+ul,ol{list-style:none}
+
+/* ─── ANIMATED BG ────────────────────────────────────── */
+.bg-grid{
+  position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);
+  background-size:48px 48px;
+  mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 0%,transparent 100%);
+}
+
+/* ─── HEADER ─────────────────────────────────────────── */
+.site-header{
+  position:relative;z-index:10;
+  padding:28px 32px 24px;
+  display:flex;align-items:center;gap:16px;
+  border-bottom:1px solid var(--border);
+  background:linear-gradient(180deg,rgba(13,17,23,.95) 0%,rgba(13,17,23,.7) 100%);
+  backdrop-filter:blur(12px);
+  position:sticky;top:0;
+}
+.logo-ring{
+  width:52px;height:52px;border-radius:50%;
+  border:2px solid rgba(255,255,255,.15);
+  padding:2px;flex-shrink:0;
+  box-shadow:0 0 0 4px rgba(255,255,255,.04);
+  transition:box-shadow .3s;
+}
+.logo-ring:hover{box-shadow:0 0 0 6px rgba(255,255,255,.09)}
+.logo-ring img{width:100%;height:100%;border-radius:50%;object-fit:cover;display:block}
+.header-text{flex:1}
+.header-title{
+  font-family:'Syne',sans-serif;
+  font-size:1.1rem;font-weight:800;
+  letter-spacing:-.3px;
+  line-height:1.2;
+}
+.header-sub{font-size:.75rem;color:var(--muted);margin-top:2px;font-weight:500}
+.header-score-pill{
+  font-family:'DM Mono',monospace;
+  font-size:.75rem;font-weight:500;
+  padding:6px 14px;border-radius:999px;
+  background:rgba(255,255,255,.06);
+  border:1px solid var(--border2);
+  white-space:nowrap;
+  transition:all .2s;
+}
+
+/* ─── CHAPTER TABS ───────────────────────────────────── */
+.tab-bar{
+  position:relative;z-index:9;
+  display:flex;gap:0;
+  overflow-x:auto;
+  border-bottom:1px solid var(--border);
+  background:rgba(13,17,23,.92);
+  backdrop-filter:blur(8px);
+  scrollbar-width:none;
+}
+.tab-bar::-webkit-scrollbar{display:none}
+.tab-btn{
+  position:relative;
+  padding:14px 22px;
+  font-family:'Syne',sans-serif;
+  font-size:.8rem;font-weight:700;
+  letter-spacing:.4px;
+  color:var(--muted);
+  white-space:nowrap;
+  transition:color .2s;
+  border-bottom:2px solid transparent;
+  margin-bottom:-1px;
+}
+.tab-btn:hover{color:var(--text)}
+.tab-btn.active{color:var(--text);border-bottom-color:var(--accent)}
+.tab-btn .tab-num{
+  font-family:'DM Mono',monospace;
+  font-size:.65rem;
+  margin-right:6px;
+  opacity:.6;
+}
+.tab-btn .tab-check{
+  font-size:.65rem;
+  margin-left:6px;
+  opacity:0;
+  transition:opacity .2s;
+}
+.tab-btn.done .tab-check{opacity:1}
+
+/* ─── MAIN LAYOUT ────────────────────────────────────── */
+.main{
+  position:relative;z-index:1;
+  max-width:760px;
+  margin:0 auto;
+  padding:32px 20px 80px;
+}
+
+/* ─── CHAPTER PANEL ──────────────────────────────────── */
+.chapter-panel{display:none}
+.chapter-panel.active{display:block}
+
+/* Chapter intro card */
+.ch-intro{
+  border-radius:20px;
+  padding:28px 28px 22px;
+  margin-bottom:24px;
+  border:1px solid var(--border2);
+  position:relative;overflow:hidden;
+}
+.ch-intro::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 70% 80% at 0% 0%,rgba(255,255,255,.04) 0%,transparent 60%);
+}
+.ch-intro-top{display:flex;align-items:center;gap:14px;margin-bottom:16px}
+.ch-icon-big{
+  width:52px;height:52px;border-radius:14px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.5rem;flex-shrink:0;
+}
+.ch-name{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;line-height:1.1}
+.ch-tagline{font-size:.85rem;color:var(--muted);margin-top:4px}
+.ch-meta-row{
+  display:flex;gap:10px;flex-wrap:wrap;
+  padding-top:16px;
+  border-top:1px solid var(--border);
+}
+.ch-meta-pill{
+  font-family:'DM Mono',monospace;
+  font-size:.7rem;font-weight:500;
+  padding:5px 12px;border-radius:999px;
+  background:rgba(255,255,255,.06);
+  border:1px solid var(--border2);
+}
+
+/* Progress strip */
+.progress-strip{
+  height:4px;
+  background:var(--border);
+  border-radius:999px;
+  margin-bottom:24px;
+  overflow:hidden;
+}
+.progress-fill{
+  height:100%;
+  border-radius:999px;
+  width:0%;
+  transition:width .5s cubic-bezier(.4,0,.2,1);
+}
+.progress-label{
+  font-family:'DM Mono',monospace;
+  font-size:.7rem;color:var(--muted);
+  margin-bottom:8px;
+  display:flex;justify-content:space-between;
+}
+
+/* Stats row */
+.stats-row{
+  display:flex;gap:10px;margin-bottom:28px;flex-wrap:wrap;
+}
+.stat-chip{
+  flex:1;min-width:80px;
+  border-radius:12px;
+  padding:12px 14px;
+  border:1px solid var(--border);
+  background:var(--card);
+  text-align:center;
+}
+.stat-num{
+  font-family:'Syne',sans-serif;
+  font-size:1.5rem;font-weight:800;
+  line-height:1;
+}
+.stat-lbl{font-size:.68rem;color:var(--muted);margin-top:4px;font-weight:500}
+
+/* ─── QUESTION CARD ──────────────────────────────────── */
+.q-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:22px 22px 18px;
+  margin-bottom:12px;
+  transition:border-color .25s, box-shadow .25s, transform .15s;
+  position:relative;
+  overflow:hidden;
+}
+.q-card:hover{
+  border-color:var(--border2);
+  box-shadow:0 4px 20px rgba(0,0,0,.3);
+}
+.q-card.answered-correct{
+  border-color:rgba(34,197,94,.35);
+  background:rgba(34,197,94,.04);
+}
+.q-card.answered-wrong{
+  border-color:rgba(239,68,68,.3);
+  background:rgba(239,68,68,.035);
+}
+
+.q-top{
+  display:flex;align-items:center;gap:10px;
+  margin-bottom:14px;
+}
+.q-num-badge{
+  font-family:'DM Mono',monospace;
+  font-size:.68rem;font-weight:500;
+  padding:3px 9px;border-radius:999px;
+  background:rgba(255,255,255,.07);
+  border:1px solid var(--border2);
+  flex-shrink:0;
+}
+.q-diff{
+  font-family:'DM Mono',monospace;
+  font-size:.63rem;font-weight:500;
+  padding:2px 8px;border-radius:999px;
+  flex-shrink:0;
+}
+.diff-e{background:rgba(34,197,94,.15);color:#4ade80;border:1px solid rgba(34,197,94,.25)}
+.diff-m{background:rgba(245,158,11,.15);color:#fbbf24;border:1px solid rgba(245,158,11,.25)}
+.diff-h{background:rgba(239,68,68,.15);color:#f87171;border:1px solid rgba(239,68,68,.25)}
+
+.q-status-icon{
+  margin-left:auto;
+  font-size:1rem;
+  opacity:0;
+  transition:opacity .3s;
+}
+.answered-correct .q-status-icon{opacity:1}
+.answered-wrong .q-status-icon{opacity:1}
+
+.q-text{
+  font-size:.975rem;
+  font-weight:500;
+  line-height:1.6;
+  color:var(--text);
+  margin-bottom:16px;
+  padding-bottom:14px;
+  border-bottom:1px solid var(--border);
+}
+
+/* ─── OPTIONS ────────────────────────────────────────── */
+.options{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+}
+@media(max-width:540px){.options{grid-template-columns:1fr}}
+
+.opt{
+  display:flex;align-items:flex-start;gap:10px;
+  padding:10px 13px;
+  border-radius:10px;
+  border:1px solid var(--border);
+  background:rgba(255,255,255,.025);
+  font-size:.86rem;
+  line-height:1.45;
+  color:rgba(232,237,245,.8);
+  transition:all .18s;
+  cursor:pointer;
+  text-align:left;
+}
+.opt:hover:not(:disabled){
+  border-color:var(--border2);
+  background:rgba(255,255,255,.055);
+  color:var(--text);
+  transform:translateY(-1px);
+}
+.opt:disabled{cursor:not-allowed;transform:none!important}
+
+.opt-key{
+  font-family:'DM Mono',monospace;
+  font-size:.7rem;font-weight:500;
+  min-width:20px;height:20px;
+  border-radius:6px;
+  background:rgba(255,255,255,.08);
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;margin-top:1px;
+  transition:all .18s;
+}
+.opt.correct-opt{
+  border-color:rgba(34,197,94,.5)!important;
+  background:rgba(34,197,94,.1)!important;
+  color:#dcfce7!important;
+}
+.opt.correct-opt .opt-key{background:rgba(34,197,94,.3);color:#4ade80}
+.opt.wrong-opt{
+  border-color:rgba(239,68,68,.45)!important;
+  background:rgba(239,68,68,.09)!important;
+  color:#fee2e2!important;
+}
+.opt.wrong-opt .opt-key{background:rgba(239,68,68,.3);color:#f87171}
+
+/* ─── EXPLANATION ────────────────────────────────────── */
+.explanation{
+  display:none;
+  margin-top:12px;
+  padding:12px 14px;
+  border-radius:10px;
+  font-size:.82rem;
+  line-height:1.6;
+  border-left:3px solid;
+}
+.explanation.show{display:block}
+.explanation.exp-correct{
+  background:rgba(34,197,94,.07);
+  border-color:var(--correct);
+  color:#bbf7d0;
+}
+.explanation.exp-wrong{
+  background:rgba(239,68,68,.07);
+  border-color:var(--wrong);
+  color:#fecaca;
+}
+.exp-label{font-weight:700;margin-right:6px}
+
+/* ─── QUICK NAV DOTS ─────────────────────────────────── */
+.dot-nav{
+  display:flex;gap:4px;flex-wrap:wrap;
+  margin-bottom:20px;
+  padding:14px;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:12px;
+}
+.dot{
+  width:13px;height:13px;
+  border-radius:50%;
+  background:var(--dim);
+  border:none;
+  transition:all .2s;
+  cursor:pointer;
+  flex-shrink:0;
+}
+.dot:hover{transform:scale(1.3)}
+.dot.dot-correct{background:var(--correct)}
+.dot.dot-wrong{background:var(--wrong)}
+.dot.dot-current{
+  background:var(--accent-light,#fff);
+  box-shadow:0 0 0 2px rgba(255,255,255,.15);
+  transform:scale(1.25);
+}
+
+/* ─── CONTROLS ───────────────────────────────────────── */
+.controls{
+  position:sticky;bottom:0;
+  z-index:8;
+  padding:14px 0 8px;
+  background:linear-gradient(0deg,var(--bg) 70%,transparent 100%);
+  display:flex;gap:10px;flex-wrap:wrap;
+  margin-top:16px;
+}
+.btn{
+  display:inline-flex;align-items:center;gap:7px;
+  padding:10px 20px;
+  border-radius:10px;
+  font-family:'Syne',sans-serif;
+  font-size:.82rem;font-weight:700;
+  letter-spacing:.2px;
+  transition:all .2s;
+}
+.btn-primary{
+  background:var(--accent);
+  color:#000;
+}
+.btn-primary:hover{filter:brightness(1.1);transform:translateY(-1px)}
+.btn-ghost{
+  background:rgba(255,255,255,.06);
+  color:var(--text);
+  border:1px solid var(--border2);
+}
+.btn-ghost:hover{background:rgba(255,255,255,.1)}
+.btn-danger{
+  background:rgba(239,68,68,.12);
+  color:#f87171;
+  border:1px solid rgba(239,68,68,.25);
+}
+.btn-danger:hover{background:rgba(239,68,68,.2)}
+.btn:disabled{opacity:.4;cursor:not-allowed;transform:none!important;filter:none!important}
+
+/* ─── RESULT CARD ────────────────────────────────────── */
+.result-panel{
+  display:none;
+  border-radius:20px;
+  padding:36px 28px;
+  text-align:center;
+  border:1px solid var(--border2);
+  background:var(--card);
+  margin-bottom:24px;
+  position:relative;overflow:hidden;
+}
+.result-panel.show{display:block}
+.result-pct{
+  font-family:'Syne',sans-serif;
+  font-size:4.5rem;font-weight:800;
+  line-height:1;
+  background:linear-gradient(135deg,var(--accent) 0%,var(--accent-light,#fff) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.result-grade{
+  display:inline-block;
+  font-family:'Syne',sans-serif;
+  font-size:1rem;font-weight:700;
+  padding:5px 18px;border-radius:999px;
+  margin:10px 0 20px;
+}
+.result-stats-row{
+  display:flex;gap:12px;justify-content:center;flex-wrap:wrap;
+}
+.r-stat{
+  background:rgba(255,255,255,.05);
+  border:1px solid var(--border2);
+  border-radius:12px;padding:14px 22px;
+}
+.r-stat-n{
+  font-family:'Syne',sans-serif;
+  font-size:2rem;font-weight:800;
+  line-height:1;
+}
+.r-stat-l{font-size:.7rem;color:var(--muted);margin-top:4px}
+
+/* ─── CHAPTER ACCENT COLORS ─────────────────────────── */
+.ch-1 .ch-intro{background:linear-gradient(135deg,rgba(245,158,11,.08) 0%,var(--card) 60%)}
+.ch-1 .ch-icon-big{background:rgba(245,158,11,.15)}
+.ch-1 .progress-fill{background:var(--ch1)}
+.ch-1 .tab-btn.active{border-bottom-color:var(--ch1);color:var(--ch1)}
+.ch-1 .btn-primary{background:var(--ch1)}
+.ch-1 .result-pct{background:linear-gradient(135deg,var(--ch1),#fde68a);-webkit-background-clip:text;background-clip:text}
+.ch-1 .result-grade{background:rgba(245,158,11,.15);color:var(--ch1);border:1px solid rgba(245,158,11,.3)}
+
+.ch-2 .ch-intro{background:linear-gradient(135deg,rgba(56,189,248,.08) 0%,var(--card) 60%)}
+.ch-2 .ch-icon-big{background:rgba(56,189,248,.15)}
+.ch-2 .progress-fill{background:var(--ch2)}
+.ch-2 .tab-btn.active{border-bottom-color:var(--ch2);color:var(--ch2)}
+.ch-2 .btn-primary{background:var(--ch2);color:#000}
+.ch-2 .result-pct{background:linear-gradient(135deg,var(--ch2),#bae6fd);-webkit-background-clip:text;background-clip:text}
+.ch-2 .result-grade{background:rgba(56,189,248,.15);color:var(--ch2);border:1px solid rgba(56,189,248,.3)}
+
+.ch-3 .ch-intro{background:linear-gradient(135deg,rgba(244,63,94,.08) 0%,var(--card) 60%)}
+.ch-3 .ch-icon-big{background:rgba(244,63,94,.15)}
+.ch-3 .progress-fill{background:var(--ch3)}
+.ch-3 .tab-btn.active{border-bottom-color:var(--ch3);color:var(--ch3)}
+.ch-3 .btn-primary{background:var(--ch3)}
+.ch-3 .result-pct{background:linear-gradient(135deg,var(--ch3),#fda4af);-webkit-background-clip:text;background-clip:text}
+.ch-3 .result-grade{background:rgba(244,63,94,.15);color:var(--ch3);border:1px solid rgba(244,63,94,.3)}
+
+.ch-4 .ch-intro{background:linear-gradient(135deg,rgba(167,139,250,.08) 0%,var(--card) 60%)}
+.ch-4 .ch-icon-big{background:rgba(167,139,250,.15)}
+.ch-4 .progress-fill{background:var(--ch4)}
+.ch-4 .tab-btn.active{border-bottom-color:var(--ch4);color:var(--ch4)}
+.ch-4 .btn-primary{background:var(--ch4);color:#000}
+.ch-4 .result-pct{background:linear-gradient(135deg,var(--ch4),#ddd6fe);-webkit-background-clip:text;background-clip:text}
+.ch-4 .result-grade{background:rgba(167,139,250,.15);color:var(--ch4);border:1px solid rgba(167,139,250,.3)}
+
+.ch-5 .ch-intro{background:linear-gradient(135deg,rgba(52,211,153,.08) 0%,var(--card) 60%)}
+.ch-5 .ch-icon-big{background:rgba(52,211,153,.15)}
+.ch-5 .progress-fill{background:var(--ch5)}
+.ch-5 .tab-btn.active{border-bottom-color:var(--ch5);color:var(--ch5)}
+.ch-5 .btn-primary{background:var(--ch5);color:#000}
+.ch-5 .result-pct{background:linear-gradient(135deg,var(--ch5),#a7f3d0);-webkit-background-clip:text;background-clip:text}
+.ch-5 .result-grade{background:rgba(52,211,153,.15);color:var(--ch5);border:1px solid rgba(52,211,153,.3)}
+
+/* ─── MISC ───────────────────────────────────────────── */
+.kbd-hint{
+  font-family:'DM Mono',monospace;
+  font-size:.65rem;color:var(--muted);
+  text-align:center;margin-top:6px;
+}
+.section-divider{
+  height:1px;
+  background:var(--border);
+  margin:28px 0;
+}
+.filter-bar{
+  display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap;
+}
+.filter-btn{
+  font-family:'DM Mono',monospace;
+  font-size:.68rem;font-weight:500;
+  padding:5px 12px;border-radius:999px;
+  border:1px solid var(--border2);
+  background:rgba(255,255,255,.04);
+  color:var(--muted);
+  transition:all .18s;
+}
+.filter-btn:hover,.filter-btn.active-filter{
+  background:rgba(255,255,255,.1);
+  color:var(--text);
+  border-color:rgba(255,255,255,.2);
+}
+.scroll-top{
+  position:fixed;bottom:24px;right:24px;z-index:50;
+  width:42px;height:42px;border-radius:50%;
+  background:rgba(255,255,255,.1);
+  border:1px solid var(--border2);
+  color:var(--text);font-size:1.1rem;
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;pointer-events:none;transition:all .3s;
+  backdrop-filter:blur(8px);
+}
+.scroll-top.show{opacity:1;pointer-events:all}
+.scroll-top:hover{background:rgba(255,255,255,.18);transform:translateY(-2px)}
+
+@keyframes fadeSlideUp{
+  from{opacity:0;transform:translateY(16px)}
+  to{opacity:1;transform:translateY(0)}
+}
+.q-card{animation:fadeSlideUp .25s ease both}
+
+@keyframes popIn{
+  0%{transform:scale(.95);opacity:0}
+  100%{transform:scale(1);opacity:1}
+}
+.result-panel.show{animation:popIn .35s ease both}
+
+/* mobile */
+@media(max-width:480px){
+  .site-header{padding:16px}
+  .main{padding:20px 14px 70px}
+  .ch-name{font-size:1.2rem}
+  .q-text{font-size:.9rem}
+  .opt{font-size:.82rem}
+  .result-pct{font-size:3.2rem}
+}
+</style>
+</head>
+<body>
+<div class="bg-grid"></div>
+
+<!-- ═══════ HEADER ═══════ -->
+<header class="site-header">
+  <div class="logo-ring"><img id="siteLogo" src="" alt="Scrutiny Academy Logo"></div>
+  <div class="header-text">
+    <div class="header-title">Class 10 Biology Quiz</div>
+    <div class="header-sub">Scrutiny Academy &nbsp;·&nbsp; Chapters 1–5 &nbsp;·&nbsp; 250 Questions</div>
+  </div>
+  <div class="header-score-pill" id="globalPill">0 / 0 Answered</div>
+</header>
+
+<!-- ═══════ CHAPTER TABS ═══════ -->
+<nav class="tab-bar" id="tabBar"></nav>
+
+<!-- ═══════ MAIN ═══════ -->
+<main class="main" id="mainContent"></main>
+
+<!-- Scroll-to-top -->
+<button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+/* ════════════════════════════════════════════════════════
+   CHAPTER METADATA
+════════════════════════════════════════════════════════ */
+const CHAPTERS = [
+  { id:1, name:"Nutrition",              icon:"🌿", tagline:"Autotrophs · Heterotrophs · Photosynthesis · Digestion", color:"var(--ch1)" },
+  { id:2, name:"Respiration",            icon:"🫁", tagline:"Aerobic · Anaerobic · ATP · Glycolysis · Krebs Cycle",  color:"var(--ch2)" },
+  { id:3, name:"Transportation",         icon:"🩸", tagline:"Heart · Blood · Xylem · Phloem · Lymph · Circulation",  color:"var(--ch3)" },
+  { id:4, name:"Excretion",              icon:"🧪", tagline:"Kidneys · Nephron · Urea · Dialysis · Osmoregulation",  color:"var(--ch4)" },
+  { id:5, name:"Control & Coordination", icon:"🧠", tagline:"Neurons · Reflex · Hormones · Tropisms · Endocrine",    color:"var(--ch5)" },
+];
+
+/* ════════════════════════════════════════════════════════
+   QUIZ DATA  — 50 questions × 5 chapters = 250 total
+   Each Q: { q, o:[4 opts], a:0-3 index, e:explanation, d:'e'|'m'|'h' }
+════════════════════════════════════════════════════════ */
+const QUIZ = {
+
+/* ─────────────────── CHAPTER 1 : NUTRITION ─────────────────── */
+1:[
+ {q:"What is the correct balanced equation for photosynthesis?",o:["6CO₂+6H₂O→C₆H₁₂O₆+O₂","6CO₂+6H₂O→C₆H₁₂O₆+6O₂","CO₂+H₂O→C₆H₁₂O₆+6O₂","6CO₂+H₂O→6C₆H₁₂O₆+O₂"],a:1,d:"e",e:"The balanced equation requires 6 CO₂ and 6 H₂O to produce one glucose molecule and 6 O₂ molecules."},
+ {q:"Which organelle is the primary site of photosynthesis?",o:["Mitochondria","Nucleus","Chloroplast","Ribosome"],a:2,d:"e",e:"Chloroplasts contain chlorophyll and are where light energy is converted to chemical energy during photosynthesis."},
+ {q:"The green pigment in leaves responsible for absorbing sunlight is:",o:["Carotene","Xanthophyll","Anthocyanin","Chlorophyll"],a:3,d:"e",e:"Chlorophyll is the primary photosynthetic pigment. It absorbs red and blue-violet wavelengths and reflects green light, giving leaves their colour."},
+ {q:"Autotrophs differ from heterotrophs in that autotrophs:",o:["Depend on other organisms for food","Digest food internally","Make their own food from inorganic substances","Only eat plants"],a:2,d:"e",e:"Autotrophs (self-feeders) synthesise organic food from simple inorganic molecules like CO₂ and H₂O using light or chemical energy."},
+ {q:"Which enzyme in saliva begins carbohydrate digestion?",o:["Pepsin","Salivary amylase","Trypsin","Lipase"],a:1,d:"e",e:"Salivary amylase (ptyalin) catalyses the hydrolysis of starch into maltose under the slightly alkaline conditions of the mouth."},
+ {q:"Bile is produced by the __ and stored in the __.",o:["Pancreas; stomach","Liver; gall bladder","Liver; pancreas","Gall bladder; liver"],a:1,d:"e",e:"Bile is synthesised in the liver and stored in the gall bladder, released into the duodenum to emulsify fats."},
+ {q:"The finger-like projections that increase absorption surface in the small intestine are called:",o:["Crypts of Lieberkühn","Microvilli only","Villi","Rugae"],a:2,d:"e",e:"Villi are mucosal projections lining the ileum. Each villus contains a lacteal and blood capillaries, enabling efficient absorption of nutrients."},
+ {q:"KOH solution is used in Mohl's half-leaf experiment to:",o:["Provide CO₂ to the leaf","Absorb CO₂ from one half of the leaf","Test for presence of starch","Supply water to leaves"],a:1,d:"m",e:"KOH absorbs CO₂ from the air surrounding one half of the leaf, creating a CO₂-free zone to show that CO₂ is essential for starch formation."},
+ {q:"Iodine solution turns __ in the presence of starch.",o:["Red","Yellow","Blue-black","Orange"],a:2,d:"e",e:"Iodine reacts with the helical structure of amylose in starch to form a blue-black complex — the standard test for starch."},
+ {q:"In Mohl's half-leaf experiment, which half will NOT turn blue-black with iodine?",o:["The half exposed to CO₂","The half exposed to sunlight","The half covered with KOH (no CO₂)","Both halves turn blue-black"],a:2,d:"m",e:"The KOH-covered half lacks CO₂ for photosynthesis, so no starch is made — the half remains brown/yellow when tested with iodine."},
+ {q:"Which part of the small intestine is the primary absorption site?",o:["Duodenum","Jejunum","Ileum","Caecum"],a:2,d:"m",e:"The ileum has the highest density of villi and microvilli (brush border), maximising nutrient absorption before material enters the large intestine."},
+ {q:"Why is destarching of leaves done before photosynthesis experiments?",o:["To add more chlorophyll","To remove pre-existing starch so results are clear","To prevent transpiration","To increase CO₂ concentration"],a:1,d:"m",e:"Leaves are kept in the dark 24–48 h so existing starch is respired away. This ensures any starch detected post-experiment was formed during the test."},
+ {q:"Saprophytic nutrition is characteristic of:",o:["Green plants","Most animals","Fungi and some bacteria","All prokaryotes"],a:2,d:"m",e:"Saprophytes secrete digestive enzymes onto dead organic matter and absorb soluble products. Rhizopus (bread mould) is a classic example."},
+ {q:"Holozoic nutrition involves the sequence:",o:["Ingestion→Egestion→Digestion→Absorption","Ingestion→Digestion→Absorption→Assimilation→Egestion","Digestion→Absorption→Ingestion→Assimilation","Absorption→Digestion→Ingestion→Egestion"],a:1,d:"m",e:"Holozoic animals take in solid food, digest it enzymatically, absorb products, assimilate them into body cells, and egest undigested remains."},
+ {q:"HCl in gastric juice serves to:",o:["Digest carbohydrates","Neutralise stomach contents","Create acid medium activating pepsin and killing bacteria","Emulsify fats"],a:2,d:"m",e:"HCl maintains gastric pH ≈1.5–2, activating pepsinogen→pepsin, denaturing proteins, and killing most swallowed micro-organisms."},
+ {q:"Pepsin acts on:",o:["Starch","Proteins→peptides","Fats→fatty acids","Maltose→glucose"],a:1,d:"e",e:"Pepsin is the main gastric protease. It catalyses hydrolysis of peptide bonds in proteins, producing smaller peptide chains."},
+ {q:"The enzyme trypsin is secreted by the __ and acts on __.",o:["Stomach; fats","Pancreas; proteins/peptides","Liver; carbohydrates","Small intestine; starch"],a:1,d:"m",e:"Trypsin (in pancreatic juice) is an endopeptidase that cleaves peptide bonds within polypeptide chains, continuing protein digestion in the duodenum."},
+ {q:"Which of the following is a product of fat digestion?",o:["Amino acids + glucose","Maltose + glycerol","Fatty acids + glycerol","Glucose + fructose"],a:2,d:"e",e:"Lipases (pancreatic and intestinal) hydrolyse triglycerides into fatty acids and glycerol, which are absorbed via lacteals as chylomicrons."},
+ {q:"Assimilation refers to:",o:["Breakdown of food molecules","Removal of undigested waste","Incorporation of absorbed nutrients into body cells for energy, growth and repair","Transport of food in blood"],a:2,d:"m",e:"After absorption, nutrients enter cells — glucose is oxidised for energy, amino acids build proteins, fatty acids form membranes. This is assimilation."},
+ {q:"The process by which Amoeba engulfs food particles is called:",o:["Pinocytosis","Phagocytosis","Exocytosis","Osmosis"],a:1,d:"m",e:"Amoeba extends pseudopodia around food particles, engulfing them in a food vacuole — this is phagocytosis ('cell eating')."},
+ {q:"The light-dependent reactions of photosynthesis occur in:",o:["Stroma of chloroplast","Mitochondria","Cytoplasm","Thylakoid membranes (grana)"],a:3,d:"h",e:"Thylakoid membranes contain photosystems I and II. Light energy splits water (photolysis), releasing O₂ and producing ATP and NADPH."},
+ {q:"The Calvin cycle (dark reaction) fixes CO₂ in the:",o:["Thylakoid","Stroma of chloroplast","Cytoplasm","Nucleus"],a:1,d:"h",e:"The Calvin cycle uses ATP and NADPH from the light reactions to reduce CO₂ into G3P (glyceraldehyde-3-phosphate), the precursor of glucose."},
+ {q:"Which wavelengths of light are most effectively used in photosynthesis?",o:["Green and yellow","Blue-violet and red","UV and infrared","All wavelengths equally"],a:1,d:"h",e:"Chlorophyll absorption spectra show peaks at ≈430 nm (blue-violet) and ≈680 nm (red). Green light is largely reflected, hence leaf colour."},
+ {q:"Rhizobium bacteria fix atmospheric nitrogen in:",o:["Soil freely","Root nodules of leguminous plants","Leaves of all plants","Water bodies"],a:1,d:"m",e:"Rhizobium forms a mutualistic symbiosis with legume roots, living in nodules where it reduces N₂→NH₃, providing fixed nitrogen to the plant."},
+ {q:"What is the significance of photosynthesis as the 'basic energy source for the living world'?",o:["It produces oxygen only","It converts solar energy into chemical energy in food, sustaining nearly all food chains","It removes CO₂ from air only","It only benefits plants"],a:1,d:"m",e:"Photosynthesis stores solar energy in glucose; all heterotrophs obtain energy by consuming autotrophs or other organisms that ate autotrophs — making it the foundation of all life."},
+ {q:"Peristalsis is:",o:["Secretion of digestive enzymes","Wave-like muscular contractions of the gut wall propelling food","Absorption of water in colon","Churning in the stomach only"],a:1,d:"e",e:"Alternate contraction and relaxation of circular and longitudinal smooth muscle in the gut wall creates waves that push ingested material along the alimentary canal."},
+ {q:"The large intestine primarily:",o:["Digests proteins","Absorbs water and forms faeces","Produces bile","Secretes insulin"],a:1,d:"e",e:"The colon absorbs water and electrolytes from the liquid chyme entering from the small intestine, compacting material into faeces."},
+ {q:"Egestion differs from excretion because egestion removes:",o:["Metabolic waste from cells","Undigested food that never entered cells","CO₂ produced in respiration","Excess salts from blood"],a:1,d:"m",e:"Egestion is expulsion of undigested/unabsorbed food (never truly in cells). Excretion removes metabolic by-products (urea, CO₂) produced inside cells."},
+ {q:"Which nutrient provides the most energy per gram?",o:["Carbohydrate (4 kcal/g)","Protein (4 kcal/g)","Fat (9 kcal/g)","Vitamins"],a:2,d:"m",e:"Fats are the most energy-dense macronutrient at 9 kcal/g — more than twice the energy density of carbohydrates or proteins."},
+ {q:"Guard cells control:",o:["Rate of photosynthesis directly","Opening and closing of stomata","Absorption of minerals by roots","Transport of sugars in phloem"],a:1,d:"e",e:"Guard cells change shape when K⁺ ions move in (turgid→open) or out (flaccid→close), regulating stomatal aperture and hence gas exchange and transpiration."},
+ {q:"Minerals are absorbed from soil into root hair cells mainly by:",o:["Osmosis","Diffusion only","Active transport (using ATP)","Gravity"],a:2,d:"m",e:"Mineral ions are in lower concentration in soil solution than inside root cells, so active transport pumps (requiring ATP) must move them against the gradient."},
+ {q:"Dietary fibre (roughage) aids health primarily by:",o:["Providing energy","Stimulating peristalsis and preventing constipation","Building muscle protein","Supplying fat-soluble vitamins"],a:1,d:"e",e:"Indigestible cellulose adds bulk to intestinal contents, stimulating peristaltic waves, promoting regular bowel movements and supporting gut microbiome."},
+ {q:"The iodine test for starch requires:",o:["Boiling in water first","Decolourising in ethanol then adding iodine solution","Direct application of iodine without any treatment","Heating with Benedict's reagent"],a:1,d:"m",e:"Standard starch test: boil leaf to kill cells → decolourise in ethanol (removes chlorophyll) → soften in hot water → add iodine solution."},
+ {q:"Pancreatic juice is alkaline because it:",o:["Contains bile salts","Contains NaHCO₃ to neutralise stomach acid entering duodenum","Secretes insulin","Contains amylase only"],a:1,d:"m",e:"Bicarbonate ions (NaHCO₃) in pancreatic juice neutralise the acidic chyme from the stomach, raising duodenal pH to ~7–8 for optimal enzyme activity."},
+ {q:"Which vitamin deficiency causes scurvy?",o:["Vitamin A","Vitamin B12","Vitamin C","Vitamin D"],a:2,d:"e",e:"Scurvy results from Vitamin C (ascorbic acid) deficiency. Vitamin C is required for collagen synthesis; deficiency causes bleeding gums and poor wound healing."},
+ {q:"Parasitic nutrition is seen in Cuscuta because it:",o:["Has yellow/white leaves with no chlorophyll and uses haustoria to extract nutrients from host","Performs photosynthesis","Decomposes dead matter","Engulfs food particles"],a:0,d:"m",e:"Cuscuta lacks chlorophyll (non-photosynthetic). Its specialised haustorial rootlets penetrate host stem vascular tissue, absorbing water, minerals and organic solutes."},
+ {q:"Sunlight is essential for photosynthesis. To prove this experimentally, one half of a leaf is covered with black paper. After several hours in light and iodine test, the covered part:",o:["Turns blue-black","Remains brown/yellow (no starch)","Turns red","Shows no change in both halves"],a:1,d:"m",e:"Without light, photosynthesis cannot occur; no starch is made in the covered part. Iodine test shows brown/yellow there, confirming light requirement."},
+ {q:"Which of these correctly summarises photosynthesis?",o:["Light + CO₂ + Water → Glucose + CO₂","CO₂ + H₂O + Light energy → Glucose + O₂","O₂ + Glucose → CO₂ + H₂O + Energy","Glucose → CO₂ + H₂O"],a:1,d:"e",e:"Photosynthesis: carbon dioxide + water + light energy → glucose + oxygen. The energy stored in glucose drives all subsequent life processes."},
+ {q:"The duodenum receives secretions from the:",o:["Liver and salivary glands","Pancreas and liver (via bile duct)","Stomach only","Small intestine glands only"],a:1,d:"m",e:"The common bile duct (from liver/gall bladder) and pancreatic duct both open into the duodenum, delivering bile and pancreatic juice to the first part of the small intestine."},
+ {q:"Transpiration pull is the main mechanism pulling water up xylem because:",o:["Root pressure is stronger","Capillary action alone is enough","Evaporation from leaves creates tension transmitted through the water column","Phloem pumps water upward"],a:2,d:"h",e:"Cohesion-tension theory: evaporation at stomata creates negative water potential; cohesive water molecules pull the water column upward through xylem from roots."},
+ {q:"Nitrogen-containing waste in humans is mainly excreted as urea because:",o:["Urea is less toxic than ammonia and requires less water to excrete","Ammonia is safer","Uric acid is too soluble","All nitrogen is excreted as gas"],a:0,d:"m",e:"Ammonia is toxic; converting it to urea (in liver ornithine cycle) reduces toxicity and allows concentrated excretion — an important adaptation for terrestrial life."},
+ {q:"Which carbohydrate is the immediate energy source for cells?",o:["Starch","Glycogen","Glucose","Fructose"],a:2,d:"e",e:"Glucose is the primary respiratory substrate. Cells oxidise glucose in glycolysis and the Krebs cycle to produce ATP for all cellular work."},
+ {q:"The statement 'photosynthesis is the basic energy source for the living world' is supported by:",o:["The fact that plants can move","The fact that solar energy stored in glucose by plants enters all food chains","The fact that plants produce oxygen","The fact that plants are large"],a:1,d:"m",e:"Nearly all ecosystems depend on photosynthetically fixed chemical energy. Herbivores eat plants, carnivores eat herbivores — solar energy flows through every trophic level."},
+ {q:"Emulsification of fats by bile means:",o:["Chemically digesting fats","Breaking large fat globules into smaller droplets, increasing surface area for lipase","Absorbing fat into blood directly","Forming fatty acids from fat"],a:1,d:"m",e:"Bile salts are amphipathic; they surround fat droplets, breaking them into tiny micelles, vastly increasing the surface area available for lipase enzyme action."},
+ {q:"Mucus secreted in the stomach:",o:["Digests proteins","Activates pepsin","Protects the stomach wall from HCl and self-digestion","Neutralises all acid"],a:2,d:"m",e:"A thick alkaline mucus layer coats the gastric epithelium, preventing pepsin and HCl from autodigesting the stomach wall (peptic ulcer results from failure of this protection)."},
+ {q:"Two chemicals used in the starch test on a leaf are:",o:["HCl and NaOH","Ethanol and iodine solution","KOH and starch","Glucose and iodine"],a:1,d:"e",e:"The leaf is decolourised in boiling ethanol (removes chlorophyll) and then treated with iodine solution, which turns blue-black if starch is present."},
+ {q:"Which part of the digestive system produces intestinal juice (succus entericus)?",o:["Pancreas","Liver","Walls of the small intestine","Stomach"],a:2,d:"m",e:"Intestinal glands (crypts of Lieberkühn) in the small intestine wall secrete intestinal juice containing maltase, sucrase, lactase, and peptidases for final digestion."},
+ {q:"Benedict's test is used to detect:",o:["Starch","Proteins","Reducing sugars (e.g. glucose)","Lipids"],a:2,d:"e",e:"Benedict's reagent contains Cu²⁺ (blue). Reducing sugars reduce Cu²⁺ → Cu⁺ (brick-red precipitate). Colour: blue→green→yellow→orange→red with increasing sugar concentration."},
+ {q:"In the process of nutrition, 'ingestion' means:",o:["Breaking food into small pieces mechanically","Taking food into the body through the mouth","Absorbing digested food into blood","Removal of undigested food"],a:1,d:"e",e:"Ingestion is the act of taking food into the alimentary canal (through the mouth). It is the first step in holozoic nutrition."},
+ {q:"Vitamins are considered micronutrients because:",o:["They contain no energy","They are needed in very small amounts but are essential for metabolism","They are made by the body","They dissolve only in water"],a:1,d:"m",e:"Vitamins are organic compounds required in trace amounts (mg or µg daily). They act as coenzymes or antioxidants; deficiency causes specific diseases (e.g. rickets, scurvy)."},
+],
+
+/* ─────────────────── CHAPTER 2 : RESPIRATION ─────────────────── */
+2:[
+ {q:"The overall equation for aerobic respiration is:",o:["C₆H₁₂O₆+O₂→CO₂+H₂O","C₆H₁₂O₆+6O₂→6CO₂+6H₂O+Energy","6CO₂+6H₂O→C₆H₁₂O₆+6O₂","C₆H₁₂O₆→2C₂H₅OH+2CO₂"],a:1,d:"e",e:"Aerobic respiration: C₆H₁₂O₆ + 6O₂ → 6CO₂ + 6H₂O + 38 ATP. Glucose is completely oxidised to CO₂ and water."},
+ {q:"The first stage of cellular respiration, occurring in the cytoplasm, is:",o:["Krebs cycle","Electron transport chain","Glycolysis","Oxidative phosphorylation"],a:2,d:"e",e:"Glycolysis splits one glucose (6C) into two pyruvate (3C) molecules in the cytoplasm, yielding a net 2 ATP and 2 NADH."},
+ {q:"Net ATP produced in glycolysis from one glucose molecule is:",o:["4","2","38","36"],a:1,d:"m",e:"Glycolysis invests 2 ATP and produces 4 ATP — net gain of 2 ATP. It also produces 2 NADH and 2 pyruvate."},
+ {q:"The Krebs cycle takes place in the:",o:["Cytoplasm","Thylakoid membrane","Mitochondrial matrix","Inner mitochondrial membrane"],a:2,d:"m",e:"Pyruvate enters the mitochondria, is converted to acetyl-CoA, and enters the Krebs cycle in the matrix, producing CO₂, NADH, FADH₂ and 2 ATP per glucose."},
+ {q:"Mitochondria are called the 'powerhouse of the cell' because:",o:["They produce glucose","They are the largest organelle","They generate most ATP through aerobic respiration","They contain DNA"],a:2,d:"e",e:"Mitochondria house the Krebs cycle (matrix) and electron transport chain (inner membrane), producing ~34 of the 38 ATP from aerobic respiration."},
+ {q:"Anaerobic respiration in yeast produces:",o:["Lactic acid only","CO₂ and water","Ethanol + CO₂ + 2 ATP","Glucose + O₂"],a:2,d:"e",e:"Yeast fermentation: glucose → 2 ethanol + 2CO₂ + 2ATP. Only 2 ATP produced because glucose is incompletely oxidised without oxygen."},
+ {q:"Anaerobic respiration in human muscle cells produces:",o:["Ethanol + CO₂","Lactic acid + 2 ATP","Pyruvate + O₂","CO₂ + H₂O"],a:1,d:"e",e:"When O₂ is insufficient (intense exercise), pyruvate is reduced to lactic acid in muscle cells, producing 2 ATP. Lactic acid build-up causes muscle fatigue."},
+ {q:"The 'term respiration' in cellular biology refers to:",o:["Breathing only","The complete process from inhalation to ATP production in cells","Only the exchange of gases in lungs","Pumping of blood"],a:1,d:"m",e:"Cellular respiration encompasses gas exchange, transport, and intracellular oxidation of fuel molecules. The Latin root 'respirare' ('to breathe') was extended to include all these steps."},
+ {q:"Normal adult breathing rate at rest is approximately:",o:["5–8 breaths/min","15–18 breaths/min","30–40 breaths/min","50–60 breaths/min"],a:1,d:"e",e:"The resting respiratory rate for adults is 12–20 breaths per minute, with ~15–18 being typical. It increases during exercise to match higher O₂ demand."},
+ {q:"Alveoli are specially adapted for gas exchange. Which adaptation is NOT correct?",o:["Extremely thin walls (one cell thick)","Moist inner lining","Dense capillary network","Thick muscular walls for contraction"],a:3,d:"m",e:"Alveoli have very thin walls to minimise diffusion distance. They have no muscle; their shape is maintained by surfactant and surrounding tissue."},
+ {q:"Oxygen is transported in blood mainly as:",o:["Dissolved in plasma","Bicarbonate ions","Oxyhemoglobin in RBCs","Carbaminohemoglobin"],a:2,d:"e",e:"~98% of O₂ is transported bound to haemoglobin as oxyhaemoglobin. Each haemoglobin carries 4 O₂ molecules."},
+ {q:"Most CO₂ from tissues is transported in blood as:",o:["Dissolved CO₂ in plasma","Carboxyhaemoglobin","Bicarbonate ions (HCO₃⁻)","CO₂ bound directly to plasma proteins"],a:2,d:"m",e:"~70% of CO₂ is converted to bicarbonate ions (CO₂ + H₂O → H₂CO₃ → H⁺ + HCO₃⁻) in RBCs by carbonic anhydrase, then transported in plasma."},
+ {q:"The respiratory control centre is located in the:",o:["Cerebrum","Cerebellum","Medulla oblongata","Hypothalamus"],a:2,d:"m",e:"The medulla oblongata's respiratory centres (dorsal and ventral groups) detect blood CO₂/pH changes via chemoreceptors and regulate breathing rhythm."},
+ {q:"Tidal volume is defined as:",o:["Maximum air exhaled forcibly","Volume of air in lungs after full exhalation","Volume of air inhaled/exhaled in one normal breath (~500 mL)","Total lung capacity"],a:2,d:"m",e:"Tidal volume (~500 mL in adults) is the air moved with each resting breath. During exercise it increases to meet elevated O₂ demand."},
+ {q:"Vital capacity is:",o:["Air remaining after maximum exhalation","Maximum air inhaled + exhaled in one forced breath (~4.5 L)","Normal tidal volume","Functional residual capacity"],a:1,d:"h",e:"Vital capacity = tidal volume + inspiratory reserve volume + expiratory reserve volume (≈4.5 L). Residual volume (~1.2 L) cannot be expelled."},
+ {q:"During inhalation, the diaphragm:",o:["Relaxes and moves upward","Contracts and flattens, increasing thoracic volume","Stays stationary","Moves sideways"],a:1,d:"e",e:"Diaphragm contraction causes it to flatten and descend; external intercostals raise ribs. Both increase thoracic volume, reducing pressure → air flows in."},
+ {q:"The epiglottis prevents:",o:["Food entering the oesophagus","Food and drink entering the trachea during swallowing","Air entering the stomach","Acid reflux"],a:1,d:"e",e:"The epiglottis is a leaf-shaped cartilage flap that folds over the glottis during swallowing, directing food/liquid into the oesophagus and away from the airway."},
+ {q:"Fermentation by yeast is exploited commercially in:",o:["Petrol production","Bread-making (CO₂ causes dough to rise) and alcohol production","Cheese from milk only","Making vinegar only"],a:1,d:"m",e:"Yeast ferments sugars → ethanol + CO₂. CO₂ makes dough rise in bread; ethanol is the alcohol in beverages. Both industries use yeast fermentation."},
+ {q:"Emphysema is characterised by:",o:["Mucus blocking bronchi","Fluid in alveoli","Destruction of alveolar walls reducing gas exchange surface","Narrowing of trachea"],a:2,d:"h",e:"Emphysema (often caused by smoking) destroys alveolar walls, reducing surface area for diffusion, causing breathlessness and low blood O₂."},
+ {q:"Energy released in respiration is stored as:",o:["Glucose","Glycogen","ATP","NADH"],a:2,d:"e",e:"ATP (adenosine triphosphate) is the universal energy currency. Hydrolysis of one ATP releases ~30 kJ/mol of free energy for cellular work."},
+ {q:"Which process yields the most ATP per glucose molecule?",o:["Anaerobic fermentation in yeast","Anaerobic respiration in muscle","Aerobic respiration","Glycolysis only"],a:2,d:"e",e:"Aerobic respiration produces ~38 ATP per glucose via glycolysis, Krebs cycle and oxidative phosphorylation. Anaerobic routes yield only 2 ATP."},
+ {q:"Lactic acid produced during intense exercise is:",o:["Permanently stored in muscles","Excreted in urine only","Transported to the liver and reconverted to glucose (Cori cycle)","Broken down immediately in muscle"],a:2,d:"h",e:"Lactic acid diffuses from muscle into blood → liver, where it is converted back to pyruvate then to glucose (gluconeogenesis) when oxygen is available — the Cori cycle."},
+ {q:"Gas exchange across alveolar membranes occurs by:",o:["Active transport","Osmosis","Simple diffusion along concentration gradients","Facilitated diffusion"],a:2,d:"e",e:"O₂ diffuses from alveolar air (high pO₂) into blood; CO₂ diffuses from blood (high pCO₂) into alveolus — both by passive diffusion without energy expenditure."},
+ {q:"Residual volume refers to:",o:["Air moved per breath","Air remaining in lungs after maximal exhalation (~1.2 L)","Maximum inspiratory volume","Functional residual capacity"],a:1,d:"h",e:"~1.2 L of air remains in the lungs even after forced exhalation. This prevents alveolar collapse and ensures continuous gas exchange between breaths."},
+ {q:"In insects, gas exchange occurs through:",o:["Lungs","Gills","Tracheal system with spiracles","Book lungs only"],a:2,d:"m",e:"Insects have a tracheal system — branching chitin-lined tubes (tracheae and tracheoles) that open via spiracles on the body surface and deliver O₂ directly to tissues."},
+ {q:"Which best describes the role of haemoglobin in CO₂ transport?",o:["It carries most CO₂ as bicarbonate","~23% of CO₂ binds to haemoglobin forming carbaminohaemoglobin","It only carries O₂, not CO₂","It converts CO₂ to bicarbonate"],a:1,d:"h",e:"~23% of CO₂ is carried as carbaminohaemoglobin (CO₂ binds to the globin protein portion, not the haem group). The majority (~70%) is bicarbonate."},
+ {q:"What increases breathing rate automatically?",o:["Decreased blood O₂ alone","Increased blood CO₂ (lowering blood pH)","Increased blood glucose","Decreased heart rate"],a:1,d:"m",e:"Central chemoreceptors in the medulla primarily respond to rising pCO₂/falling pH, signalling the respiratory centre to increase rate and depth of breathing."},
+ {q:"Pyruvate is the end product of:",o:["Krebs cycle","Electron transport chain","Glycolysis","Oxidative phosphorylation"],a:2,d:"m",e:"Glycolysis breaks glucose (C₆) into two pyruvate (C₃) molecules in the cytoplasm. Pyruvate then either enters the Krebs cycle (aerobic) or is reduced (anaerobic)."},
+ {q:"The electron transport chain produces ATP through:",o:["Substrate-level phosphorylation","Chemiosmosis — proton gradient across inner mitochondrial membrane drives ATP synthase","Direct phosphorylation of ADP by enzymes","Photophosphorylation"],a:1,d:"h",e:"NADH and FADH₂ donate electrons to ETC complexes, pumping H⁺ ions into the intermembrane space. H⁺ flows back through ATP synthase (chemiosmosis), producing ~34 ATP."},
+ {q:"Gaseous exchange in fish occurs through:",o:["Lungs","Skin only","Gills — countercurrent exchange with water","Tracheal system"],a:2,d:"m",e:"Fish gill lamellae have rich capillary networks. Blood and water flow in opposite directions (countercurrent), maximising the O₂ concentration gradient for efficient absorption."},
+ {q:"Lenticels in woody plant stems allow:",o:["Photosynthesis to occur in bark","Gas exchange for stem cells during respiration","Water absorption","Sugar translocation"],a:1,d:"m",e:"Lenticels are pores in the bark (periderm) with loosely packed cells, allowing O₂ to diffuse in and CO₂ out for respiration of living cells in woody stems and roots."},
+ {q:"NADH produced during respiration is important because:",o:["It is the end product of aerobic respiration","It carries electrons to the electron transport chain for ATP production","It directly breaks down glucose","It carries CO₂ to the lungs"],a:1,d:"h",e:"NADH (and FADH₂) are electron carriers. They donate electrons to ETC Complex I/II, driving proton pumping and ultimately the synthesis of ATP via ATP synthase."},
+ {q:"Aerobic respiration produces __ times more ATP than anaerobic respiration.",o:["5","10","19 (38 vs 2 ATP)","50"],a:2,d:"m",e:"Aerobic: ~38 ATP/glucose. Anaerobic: 2 ATP/glucose. Aerobic is ~19 times more efficient because glucose is completely oxidised to CO₂ + H₂O."},
+ {q:"The pleura is:",o:["Muscle of the diaphragm","Double-layered membrane surrounding each lung; pleural fluid reduces friction","The inner lining of alveoli","Cartilage rings in the trachea"],a:1,d:"m",e:"The visceral and parietal pleura enclose each lung. Pleural fluid between the layers lubricates breathing movements, reducing friction during ventilation."},
+ {q:"Which chemical is produced when yeast is used to make wine?",o:["Lactic acid","Acetic acid","Ethanol (ethyl alcohol)","Glycerol"],a:2,d:"e",e:"Wine production: Saccharomyces cerevisiae ferments grape sugars anaerobically: glucose → 2 ethanol + 2CO₂ + 2ATP."},
+ {q:"Asthma is caused by:",o:["Destruction of alveoli","Inflammation and narrowing of bronchioles, restricting airflow","Fluid in the pleural cavity","Hardening of trachea cartilage"],a:1,d:"m",e:"Asthma involves chronic inflammation of bronchioles with smooth muscle spasm and mucus secretion, reducing airway diameter and causing wheezing and breathlessness."},
+ {q:"Respiration in plants occurs:",o:["Only in leaves during the day","Only in roots","In all living cells 24 hours a day","Only during the dark period"],a:2,d:"e",e:"All living plant cells (roots, stems, leaves) respire continuously to produce ATP. Unlike photosynthesis, respiration is not restricted to light periods or to green cells."},
+ {q:"Acetyl-CoA enters the Krebs cycle from:",o:["Direct glycolysis","Oxidative decarboxylation of pyruvate in the mitochondrial matrix","The electron transport chain","The cytoplasm directly"],a:1,d:"h",e:"Pyruvate crosses into the mitochondrial matrix where the pyruvate dehydrogenase complex converts it to acetyl-CoA + CO₂ + NADH before it enters the Krebs cycle."},
+ {q:"Carbon dioxide produced during respiration is removed from body tissues by:",o:["O₂ in blood","Diffusing into capillary blood and being transported to the lungs","Active pumping by heart","Lymphatic system"],a:1,d:"e",e:"CO₂ (produced in cellular respiration) diffuses down its concentration gradient from cells into capillary blood, is transported mainly as HCO₃⁻ to the lungs, and exhaled."},
+ {q:"The structure of a mitochondrion that is important for ATP synthesis is:",o:["Outer membrane","Intermembrane space only","Inner membrane with its cristae (folds)","Ribosomes in matrix"],a:2,d:"h",e:"Cristae (inner membrane folds) dramatically increase the surface area for ETC complexes and ATP synthase, maximising ATP production capacity."},
+ {q:"During vigorous exercise, extra CO₂ produced causes:",o:["Blood pH to rise, slowing breathing","Blood pH to fall (more acidic), stimulating increased breathing rate","No change in breathing","Reduced heart rate"],a:1,d:"m",e:"More CO₂ → more carbonic acid → lower blood pH → medullary chemoreceptors detect acidosis → respiratory centre increases breathing rate and depth to expel CO₂."},
+ {q:"Which gas is released during fermentation of glucose by yeast?",o:["O₂","CO₂","N₂","H₂"],a:1,d:"e",e:"Fermentation: C₆H₁₂O₆ → 2C₂H₅OH + 2CO₂. The CO₂ released causes bread dough to rise and creates bubbles in fermented beverages."},
+ {q:"Surfactant in the lungs:",o:["Is a muscle that controls breathing","Reduces surface tension in alveoli, preventing their collapse","Transports oxygen in blood","Filters bacteria from inhaled air"],a:1,d:"h",e:"Surfactant (dipalmitoyl phosphatidylcholine) is secreted by type II alveolar cells. It reduces surface tension, preventing alveolar collapse on exhalation."},
+ {q:"The term 'oxygen debt' refers to:",o:["Lack of O₂ in blood","Extra O₂ needed after anaerobic exercise to oxidise accumulated lactic acid","Normal O₂ consumption at rest","Loss of O₂ from blood"],a:1,d:"m",e:"After intense exercise, extra O₂ is consumed to metabolise lactic acid (convert it back to glucose or CO₂+H₂O) — this repayment of 'borrowed' anaerobic energy is oxygen debt."},
+ {q:"The total ATP yield from one glucose in aerobic respiration is approximately:",o:["2","8","38","100"],a:2,d:"m",e:"Glycolysis: 2 ATP + 2 NADH; pyruvate decarboxylation: 2 NADH; Krebs cycle: 2 ATP + 6 NADH + 2 FADH₂; ETC: ~34 ATP. Total ≈ 38 ATP."},
+ {q:"Which of the following is NOT a product of aerobic respiration?",o:["Carbon dioxide","Water","Ethanol","ATP"],a:2,d:"e",e:"Ethanol is an end product of anaerobic fermentation in yeast, NOT aerobic respiration. Aerobic respiration produces CO₂, H₂O, and ATP only."},
+ {q:"Respiratory substrate refers to:",o:["The enzyme that drives respiration","The molecule oxidised in respiration (primarily glucose) to release energy","The membranes where respiration occurs","The oxygen molecule"],a:1,d:"m",e:"The respiratory substrate is the organic molecule oxidised for energy. Glucose is primary, but fatty acids and amino acids can serve as substrates when glucose is scarce."},
+ {q:"Breathing movements in humans are driven by:",o:["Heart contractions","Lung elasticity alone","Contraction and relaxation of diaphragm and intercostal muscles","Brain electrical impulses directly moving air"],a:2,d:"e",e:"Rhythmic contraction of the diaphragm (↓ = inspire) and external intercostal muscles (raise ribs = inspire) changes thoracic volume, creating pressure differences that drive airflow."},
+ {q:"FAD is reduced to FADH₂ during:",o:["Glycolysis","Krebs cycle (succinate → fumarate step)","Electron transport chain","Fermentation"],a:1,d:"h",e:"In the Krebs cycle, succinate dehydrogenase oxidises succinate to fumarate, reducing FAD → FADH₂. This is the only step in the cycle that reduces FAD rather than NAD⁺."},
+ {q:"Pneumonia causes difficulty in breathing because:",o:["It destroys bronchi","Alveoli fill with fluid/pus, reducing surface area for gas exchange","It paralyses the diaphragm","It removes haemoglobin from blood"],a:1,d:"m",e:"Pneumonia is an infection causing inflammation and fluid/pus accumulation in alveoli. This reduces the gas exchange surface area and diffusion, causing hypoxia."},
+],
+
+/* ─────────────────── CHAPTER 3 : TRANSPORTATION ─────────────────── */
+3:[
+ {q:"The human heart has how many chambers?",o:["2","3","4","6"],a:2,d:"e",e:"The human heart has 4 chambers: 2 atria (upper, thin-walled receiving chambers) and 2 ventricles (lower, thick-walled pumping chambers)."},
+ {q:"Double circulation means blood passes through the heart:",o:["Once per complete circuit","Twice per complete circuit (pulmonary + systemic)","Three times per circuit","Four times per circuit"],a:1,d:"m",e:"Pulmonary circulation: right side → lungs → left side. Systemic circulation: left side → body → right side. Blood passes through the heart twice per complete trip around the body."},
+ {q:"The SA node is called the pacemaker because:",o:["It pumps blood","It generates spontaneous electrical impulses that initiate each heartbeat","It regulates blood pressure","It controls the AV node only"],a:1,d:"m",e:"The sino-atrial (SA) node in the right atrial wall generates rhythmic action potentials (~70/min) that spread across both atria, then through the AV node to ventricles."},
+ {q:"Oxygenated blood returns from the lungs to the:",o:["Right atrium","Right ventricle","Left atrium via pulmonary veins","Left ventricle directly"],a:2,d:"e",e:"The four pulmonary veins carry oxygenated blood from the lungs to the left atrium — the only veins that carry oxygenated blood."},
+ {q:"Arteries are characterised by:",o:["Thin walls and valves","Thick, elastic, muscular walls; carry blood away from heart","Carrying only deoxygenated blood","Having valves to prevent backflow"],a:1,d:"e",e:"Arterial walls have thick smooth muscle and elastic tissue to withstand and dampen the high pressure generated by ventricular contraction."},
+ {q:"Capillaries enable exchange of materials because:",o:["They are the widest vessels","Their walls are only one endothelial cell thick","They have valves","They carry the most blood"],a:1,d:"e",e:"Capillary walls are a single layer of squamous endothelial cells — the minimal barrier for O₂, nutrients, CO₂, and waste to diffuse between blood and interstitial fluid."},
+ {q:"The component of blood responsible for immune defence is:",o:["Erythrocytes (RBCs)","Thrombocytes (platelets)","Leukocytes (WBCs)","Plasma proteins"],a:2,d:"e",e:"WBCs (neutrophils, lymphocytes, monocytes, etc.) combat infection through phagocytosis, antibody production, and cytotoxic killing of pathogens and infected cells."},
+ {q:"Haemoglobin is an iron-containing protein that:",o:["Clots blood","Transports O₂ in red blood cells","Carries CO₂ only","Provides immunity"],a:1,d:"e",e:"Each haemoglobin molecule has 4 iron-porphyrin (haem) groups, each binding one O₂ in the lungs to form oxyhaemoglobin, releasing O₂ in respiring tissues."},
+ {q:"Normal human blood pressure is:",o:["80/120 mmHg","120/80 mmHg","60/40 mmHg","180/90 mmHg"],a:1,d:"e",e:"120 mmHg systolic (ventricular contraction) / 80 mmHg diastolic (ventricular relaxation) is considered normal. Persistent >140/90 is hypertension."},
+ {q:"Platelets (thrombocytes) function in:",o:["O₂ transport","Immune responses","Blood clotting — forming a platelet plug and releasing clotting factors","Carrying hormones"],a:2,d:"e",e:"At wound sites, platelets aggregate, release clotting factors, and trigger the coagulation cascade, ultimately forming a fibrin clot to stop bleeding."},
+ {q:"The tricuspid valve is located:",o:["Between left atrium and left ventricle","Between right ventricle and pulmonary artery","Between right atrium and right ventricle","At the aortic root"],a:2,d:"m",e:"The tricuspid (right atrioventricular) valve has 3 cusps and prevents backflow from right ventricle into right atrium during ventricular systole."},
+ {q:"Veins differ from arteries structurally in that veins:",o:["Have thicker walls","Have semilunar valves to prevent backflow of blood","Have no valves","Carry only oxygenated blood"],a:1,d:"m",e:"Most veins contain semilunar (pocket) valves that open when blood flows toward the heart and close to prevent backflow, especially important against gravity in limbs."},
+ {q:"Xylem is responsible for transporting __ in plants.",o:["Organic solutes (sugars) from leaves to roots","Water and dissolved minerals from roots to all aerial parts","Amino acids throughout the plant","Hormones between organs"],a:1,d:"e",e:"Xylem vessels are dead, lignified cells forming continuous tubes from roots to leaves. They carry the transpiration stream (water + dissolved minerals) upward."},
+ {q:"Phloem transports __ in plants.",o:["Water and mineral salts upward","Organic solutes (mainly sucrose) from source to sink — bidirectionally","Only hormones","Water downward only"],a:1,d:"e",e:"Phloem (sieve tubes + companion cells) transports sugars, amino acids and hormones from photosynthetic sources (leaves) to sinks (roots, fruits, growing tips)."},
+ {q:"Transpiration pull is the main mechanism pulling water up xylem. It works because:",o:["Root pressure is very strong","Capillary action alone is enough for tall trees","Evaporation from stomata creates tension; cohesive water column is pulled up","Phloem pumps water upward"],a:2,d:"m",e:"Cohesion-tension mechanism: evaporation → negative water potential at leaf → tension transmitted through cohesive water column in xylem → water absorbed from soil."},
+ {q:"Root pressure contributes to water rise in plants primarily:",o:["In tall trees","At night when transpiration is low","Only during the day","In all conditions equally"],a:1,d:"m",e:"Root pressure (due to active ion uptake creating osmotic gradient) is significant only when transpiration is minimal (night, low temperature, high humidity)."},
+ {q:"Translocation in phloem requires:",o:["No energy","Energy (ATP) for active loading/unloading of sucrose","Only gravity","Only osmosis"],a:1,d:"h",e:"Companion cells use ATP to load sucrose into sieve tubes (source), raising osmotic pressure and drawing water in. At the sink, sucrose is unloaded, reversing the gradient."},
+ {q:"Lymph is:",o:["Blood without RBCs","Tissue fluid that has entered lymph capillaries and is returned to venous blood","A type of hormone","Digestive fluid"],a:1,d:"m",e:"Fluid leaks from blood capillaries into tissue spaces (interstitial fluid). Lymph capillaries drain excess fluid → lymph vessels → lymph nodes → back into blood via thoracic duct."},
+ {q:"Blood group O is called universal donor because:",o:["O blood has all antigens","O RBCs lack A and B antigens, so are not attacked by recipient's antibodies","O blood has no antibodies","O blood is most common"],a:1,d:"m",e:"Group O erythrocytes lack A and B surface antigens; recipients of any ABO blood group will not mount an antibody response against them, making O⁻ the safest donation."},
+ {q:"Cardiac output = __ × __.",o:["Blood pressure × heart rate","Heart rate × stroke volume","Tidal volume × breathing rate","Systolic pressure × diastolic pressure"],a:1,d:"m",e:"Cardiac output (L/min) = Heart rate (beats/min) × Stroke volume (mL/beat). At rest: ~70 × 70 mL = ~5 L/min; during intense exercise up to ~25 L/min."},
+ {q:"Atherosclerosis is caused by:",o:["High blood RBC count","Build-up of fatty plaques (atheroma) in arterial walls, narrowing the lumen","Low blood pressure","Thin arterial walls"],a:1,d:"m",e:"Atherosclerosis: endothelial damage → LDL cholesterol deposits → foam cells → plaques. Plaque build-up narrows arteries, raising blood pressure and risk of thrombosis."},
+ {q:"What is the function of semilunar valves in the heart?",o:["Prevent backflow from atria to ventricles","Prevent backflow from aorta/pulmonary artery into ventricles after systole","Allow blood from veins into atria","Open during diastole to fill ventricles"],a:1,d:"m",e:"Aortic and pulmonary semilunar valves prevent backflow of blood into the ventricles after ejection. They are forced open by ventricular systole and snap shut in diastole."},
+ {q:"The lymphatic system plays a role in:",o:["Transporting O₂","Filtering and returning interstitial fluid to blood, and mounting immune responses","Producing RBCs","Carrying glucose to cells"],a:1,d:"m",e:"Lymph capillaries collect excess interstitial fluid and large molecules (proteins, fats from lacteals). Lymph nodes filter pathogens, and lymphocytes provide immune surveillance."},
+ {q:"Guard cells open stomata when they become:",o:["Flaccid (lose water)","Turgid (gain water and bow outward)","Dead","Larger in darkness"],a:1,d:"m",e:"When guard cells absorb water, they become turgid. Their unevenly thickened inner walls cause them to bow, enlarging the stomatal pore."},
+ {q:"Which ions trigger stomatal opening?",o:["Na⁺ and Cl⁻","K⁺ (potassium ions) entering guard cells in light","Ca²⁺ only","Mg²⁺"],a:1,d:"h",e:"In light, proton pumps move H⁺ out of guard cells; K⁺ flows in to maintain electrical neutrality, lowering water potential → water enters by osmosis → stomata open."},
+ {q:"Pulmonary artery carries __ blood; pulmonary veins carry __ blood.",o:["Oxygenated; deoxygenated","Deoxygenated; oxygenated","Oxygenated; oxygenated","Deoxygenated; deoxygenated"],a:1,d:"e",e:"The pulmonary artery (right ventricle → lungs) is the only artery carrying deoxygenated blood. Pulmonary veins (lungs → left atrium) are the only veins with oxygenated blood."},
+ {q:"Guttation refers to:",o:["Loss of water vapour through stomata","Secretion of water droplets from hydathodes due to root pressure","Absorption of dew by leaves","Photosynthesis at night"],a:1,d:"m",e:"When transpiration is low (cool, humid nights) but root pressure is high, xylem sap is forced out through hydathodes at leaf margins — appearing as water droplets at dawn."},
+ {q:"Osmosis is the movement of water from:",o:["High solute concentration to low solute concentration","High water potential to low water potential through a selectively permeable membrane","Low water potential to high water potential","Any direction regardless of concentration"],a:1,d:"m",e:"Osmosis: water molecules move passively down the water potential gradient (from dilute = high Ψ to concentrated = low Ψ) across a selectively permeable membrane."},
+ {q:"Plasma makes up approximately __ % of blood volume.",o:["25%","45%","55%","90%"],a:2,d:"m",e:"Plasma constitutes ~55% of blood volume. It is ~90% water, carrying proteins (albumin, fibrinogen, antibodies), nutrients, hormones, and waste products."},
+ {q:"In sickle-cell anaemia, haemoglobin is abnormal because:",o:["It contains too much iron","A single amino acid substitution (glutamic acid → valine) makes HbS polymerise at low O₂","The haem group is absent","There are too many haemoglobin molecules"],a:1,d:"h",e:"HbS polymerises when deoxygenated, distorting RBCs into a sickle shape that blocks capillaries and is haemolysed quickly, causing anaemia and painful crises."},
+ {q:"Xylem vessels are formed from cells that are __ at maturity.",o:["Living with large vacuoles","Dead, with no cytoplasm; walls lignified for strength and impermeability","Living and metabolically active","Thin-walled and transparent"],a:1,d:"m",e:"Xylem vessel elements undergo programmed death at maturity; their end walls dissolve to form a continuous lumen. Lignin strengthens walls and makes them water-tight."},
+ {q:"The pericardium is:",o:["A heart chamber","The muscle layer of the heart wall","A double-layered sac enclosing the heart, containing pericardial fluid","The outer lining of blood vessels"],a:2,d:"m",e:"The pericardium (fibrous outer + serous inner layers) surrounds the heart. Pericardial fluid between the serous layers reduces friction during heartbeat."},
+ {q:"Hypertension (persistently elevated BP) can lead to:",o:["Stronger heart and lower stroke risk","Damage to arterial walls, increased risk of stroke, heart attack and kidney disease","Lower cardiac output","Reduced risk of atherosclerosis"],a:1,d:"m",e:"Sustained high blood pressure mechanically stresses arterial walls, promotes atherosclerosis, can lead to aneurysm, stroke, myocardial infarction, and kidney damage."},
+ {q:"Companion cells in phloem provide:",o:["Structural support only","Metabolic support and ATP to sieve tube elements, which lack a nucleus","Water to the sieve tube","Mineral transport"],a:1,d:"h",e:"Sieve tube elements (phloem conducting cells) lack nuclei and most organelles. Adjacent companion cells provide proteins, ATP and regulatory molecules via plasmodesmata."},
+ {q:"Turgor pressure in plant cells is important for:",o:["Cell division only","Maintaining cell shape (rigidity) and driving cell expansion during growth","Photosynthesis","Mineral absorption"],a:1,d:"m",e:"Water entering the central vacuole pushes outward (turgor pressure) against the cell wall. Turgor provides mechanical support to non-woody plants and drives cell elongation."},
+ {q:"Cohesion of water molecules in xylem is due to:",o:["Covalent bonds","Hydrogen bonds between water molecules","Ionic bonds","Van der Waals forces only"],a:1,d:"h",e:"Water molecules form hydrogen bonds with each other (cohesion) and with xylem walls (adhesion). This cohesion allows the water column to withstand the tension created by transpiration."},
+ {q:"What is cardiac diastole?",o:["Ventricular contraction pumping blood out","Relaxation phase — atria and ventricles fill with blood","The time between two heartbeats","The closing of semilunar valves"],a:1,d:"m",e:"Diastole is the relaxation phase of the cardiac cycle. Atria fill from veins; then AV valves open and ventricles fill passively (and by atrial systole)."},
+ {q:"Anaemia results from:",o:["Too many red blood cells","Deficiency of functional haemoglobin or RBCs, reducing O₂-carrying capacity","Excess platelets","High white cell count"],a:1,d:"e",e:"Anaemia (iron deficiency, B12/folate deficiency, haemolysis, blood loss) reduces O₂ transport capacity, causing fatigue, pallor, and breathlessness."},
+ {q:"Transpiration from leaves is greatest when:",o:["It is cold, dark and humid","It is hot, bright, windy and dry","Stomata are closed","Leaves are wilted"],a:1,d:"m",e:"Transpiration rate increases with: high temperature (more evaporation), bright light (stomata open), wind (removes saturated air), and low humidity (steep diffusion gradient)."},
+ {q:"Minerals enter root hair cells against their concentration gradient by:",o:["Osmosis","Diffusion","Active transport using ATP","Simple diffusion"],a:2,d:"m",e:"Mineral ions (K⁺, NO₃⁻, PO₄³⁻ etc.) are at lower concentration in soil water than in root cells. ATP-driven pumps actively transport them across the root cell membrane."},
+ {q:"The sinoatrial node is located in the:",o:["Left ventricle","Septum between ventricles","Right atrial wall","Left atrium"],a:2,d:"m",e:"The SA node (pacemaker) is embedded in the posterior wall of the right atrium near the superior vena cava entry. Its intrinsic rate is ~70 impulses/min."},
+ {q:"Blood clotting requires which ion as a cofactor?",o:["Na⁺","K⁺","Ca²⁺","Mg²⁺"],a:2,d:"h",e:"Calcium ions (Ca²⁺) are essential cofactors for several steps in the coagulation cascade, including activation of factors X and II (prothrombin → thrombin)."},
+ {q:"The hepatic portal vein carries:",o:["Oxygenated blood to the liver from the heart","Nutrient-rich blood from the intestines to the liver","Deoxygenated blood from liver to heart","Lymph from the intestines"],a:1,d:"h",e:"Absorbed nutrients from the small intestine are collected by the hepatic portal vein and carried to the liver for processing (glucose storage, amino acid deamination, detoxification)."},
+ {q:"Pressure flow hypothesis explains transport in phloem by:",o:["Gravity pulling sugar down","High turgor at source (loading) and low turgor at sink (unloading) creating a pressure gradient driving flow","Root pressure driving sugars upward","Active pumping at every node"],a:1,d:"h",e:"Münch's pressure flow: high solute concentration at source lowers water potential → water enters sieve tubes → high turgor → solution flows under pressure to sinks with lower turgor."},
+ {q:"Erythrocytes (RBCs) in mature form lack:",o:["Haemoglobin","Cell membrane","Nucleus (and most organelles)","The ability to carry O₂"],a:2,d:"m",e:"Mature mammalian RBCs are anucleate (no nucleus) and lack mitochondria. This maximises space for haemoglobin and prevents the cell from using the O₂ it carries."},
+ {q:"What is the role of lymph nodes?",o:["Produce red blood cells","Filter lymph, removing pathogens and debris; house lymphocytes for immune response","Produce plasma proteins","Regulate blood pressure"],a:1,d:"m",e:"Lymph nodes contain macrophages (engulf pathogens) and lymphocytes (B and T cells). Lymph is filtered as it passes through, triggering immune responses when antigens are detected."},
+ {q:"An experiment to observe the internal structure of a mammalian heart requires:",o:["Microscope and slides only","A preserved/fresh mammalian heart, dissection scissors and scalpel, and dissection board","X-ray machine","Only a magnifying glass"],a:1,d:"m",e:"Heart dissection requires a preserved heart (e.g. sheep/pig), dissection instruments, a dissection board, and gloves. Structures observed include chambers, valves, and major vessels."},
+ {q:"Which blood vessel carries blood from the left ventricle to the body?",o:["Pulmonary artery","Superior vena cava","Aorta","Pulmonary vein"],a:2,d:"e",e:"The aorta (largest artery, ~2.5 cm diameter) arises from the left ventricle and distributes oxygenated blood through its branches to all body systems."},
+],
+
+/* ─────────────────── CHAPTER 4 : EXCRETION ─────────────────── */
+4:[
+ {q:"Excretion is best defined as:",o:["Egestion of undigested food","Removal of metabolic waste products produced within cells from the body","Breathing out CO₂ only","Sweating for temperature control"],a:1,d:"e",e:"Excretion removes metabolic waste (urea, CO₂, excess water, mineral salts) produced by cellular reactions. It differs from egestion (removal of undigested food never inside cells)."},
+ {q:"The functional unit of the kidney is the:",o:["Ureter","Glomerulus","Nephron","Renal pelvis"],a:2,d:"e",e:"Each kidney contains ~1 million nephrons — tubular units that filter blood (glomerulus + Bowman's capsule), reabsorb useful substances, and produce urine."},
+ {q:"The main nitrogenous excretory product in humans is:",o:["Ammonia","Uric acid","Urea","Creatine"],a:2,d:"e",e:"Urea is synthesised in the liver from toxic ammonia (released during amino acid deamination) via the ornithine (urea) cycle, then excreted by the kidneys."},
+ {q:"Ultrafiltration of blood in the kidney occurs in:",o:["Loop of Henle","Collecting duct","Proximal convoluted tubule","Bowman's capsule surrounding the glomerulus"],a:3,d:"m",e:"High hydrostatic pressure in glomerular capillaries forces plasma (minus large proteins and cells) through the glomerular filtration membrane into Bowman's space."},
+ {q:"Which substances are normally ABSENT from urine?",o:["Urea and creatinine","Glucose and proteins (normally fully reabsorbed or not filtered)","Urea and water","Salt"],a:1,d:"m",e:"Glucose is completely reabsorbed in the PCT; large proteins don't filter through. Their presence in urine (glycosuria, proteinuria) indicates kidney malfunction or diabetes."},
+ {q:"ADH (antidiuretic hormone) acts on the collecting duct to:",o:["Increase urine volume","Decrease water reabsorption","Increase water reabsorption, producing concentrated urine","Increase sodium excretion"],a:2,d:"m",e:"ADH (vasopressin) released by the posterior pituitary inserts aquaporin channels in collecting duct cells, increasing water permeability → more water reabsorbed → concentrated urine."},
+ {q:"The hormone aldosterone from the adrenal cortex acts on kidneys to:",o:["Increase water excretion","Increase Na⁺ reabsorption in DCT/collecting duct, raising blood volume and pressure","Decrease K⁺ secretion","Dilute urine"],a:1,d:"h",e:"Aldosterone upregulates Na⁺/K⁺-ATPase and apical Na⁺ channels in DCT and collecting duct → more Na⁺ (and water by osmosis) reabsorbed, more K⁺ secreted."},
+ {q:"Urea is formed in the __ from __.",o:["Kidneys; amino acids","Liver; deamination of excess amino acids","Pancreas; glucose","Spleen; old red blood cells"],a:1,d:"m",e:"In the liver, excess amino acids are deaminated (amino group removed → ammonia + keto acid). Ammonia is converted to urea in the ornithine cycle — less toxic and more soluble."},
+ {q:"Haemodialysis replaces kidney function by:",o:["Transplanting a new kidney","Passing patient's blood through a machine with a semi-permeable membrane that filters waste","Using the patient's own lymph nodes","Stimulating the liver to remove urea"],a:1,d:"e",e:"In haemodialysis, blood is pumped across a semi-permeable dialysis membrane. Waste products (urea, creatinine, K⁺) diffuse into dialysis fluid down concentration gradients."},
+ {q:"Reabsorption in the proximal convoluted tubule (PCT) includes:",o:["Urea reabsorption primarily","100% glucose, amino acids, most water, Na⁺, K⁺, HCO₃⁻","Only water reabsorption","Only protein reabsorption"],a:1,d:"m",e:"PCT reabsorbs essentially all filtered glucose and amino acids (active transport), ~65–70% of Na⁺/water, and most HCO₃⁻. This recovers valuable nutrients before urine is concentrated."},
+ {q:"The skin acts as an excretory organ through:",o:["Absorbing minerals","Secreting sweat containing water, NaCl, small amounts of urea, and lactic acid","Producing vitamin D only","Regulating blood pressure"],a:1,d:"e",e:"Sweat glands secrete sweat (~99% water + electrolytes + trace urea/lactic acid) for both thermoregulation and minor excretion. Sweat is not a major excretory route but does remove waste."},
+ {q:"Bilirubin is:",o:["A kidney hormone","A yellow pigment from haemoglobin breakdown; excreted in bile","A urine protein","An adrenal hormone"],a:1,d:"m",e:"When the liver breaks down haemoglobin from old RBCs, the haem group is converted to biliverdin then bilirubin. Bilirubin is secreted into bile; its accumulation causes jaundice."},
+ {q:"Jaundice is caused by:",o:["Excess urea in blood","Excess bilirubin in blood (from liver disease or bile duct obstruction) causing yellowing of skin/eyes","Kidney failure","Excess glucose in urine"],a:1,d:"m",e:"When bilirubin accumulates in plasma (liver can't excrete it fast enough, or bile duct is blocked), it deposits in skin and sclera, causing the yellow discolouration of jaundice."},
+ {q:"Aquatic animals (fish) mainly excrete nitrogenous waste as:",o:["Urea","Uric acid","Ammonia","Creatinine"],a:2,d:"m",e:"Fish excrete ammonia directly across gill membranes. Ammonia is highly toxic but is immediately diluted by surrounding water, so no expensive urea conversion is needed."},
+ {q:"Birds and reptiles excrete nitrogenous waste mainly as:",o:["Urea","Ammonia","Uric acid (semi-solid, water-conserving)","Creatinine"],a:2,d:"m",e:"Uric acid requires minimal water for excretion (it is nearly insoluble → forms paste). This adaptation conserves water in arid environments and prevents nitrogenous waste accumulating in eggs."},
+ {q:"Osmoregulation refers to:",o:["Regulation of osmosis in food","Maintenance of constant osmotic concentration of body fluids","Regulation of blood pressure only","Control of water in plants"],a:1,d:"m",e:"Osmoregulation controls water and solute balance to maintain constant body fluid osmolarity. Kidneys are the primary osmoregulatory organs in mammals, working with ADH and aldosterone."},
+ {q:"The Loop of Henle creates:",o:["Filtration pressure in glomerulus","An osmotic gradient in the medulla enabling the collecting duct to concentrate urine","A site for glucose reabsorption","Blood pressure in renal artery"],a:1,d:"h",e:"The hairpin loop of Henle's countercurrent multiplier generates a high NaCl/urea osmolarity in the medullary interstitium. This osmotic gradient draws water out of the collecting duct."},
+ {q:"Peritubular capillaries surround the:",o:["Glomerulus","Nephron tubules (PCT, loop, DCT, collecting duct)","Renal pelvis","Ureter"],a:1,d:"m",e:"Peritubular capillaries arise from the efferent arteriole of the glomerulus and surround the tubules, collecting reabsorbed substances and maintaining blood flow through the kidney."},
+ {q:"Renal threshold is:",o:["The maximum urine volume per day","The plasma concentration of a substance above which it appears in urine (e.g. glucose ≈180 mg/dL)","The normal urine pH","The blood pressure in glomerulus"],a:1,d:"h",e:"Renal threshold: at plasma glucose <~180 mg/dL, all filtered glucose is reabsorbed. Above this, transport carriers are saturated and glucose 'spills' into urine (glycosuria)."},
+ {q:"The lungs contribute to excretion by removing:",o:["Urea only","CO₂ and water vapour — both metabolic waste products","Ammonia only","All nitrogenous waste"],a:1,d:"e",e:"CO₂ is a waste product of aerobic respiration in all cells. Water vapour is also exhaled. Both are excreted via the lungs, making the lungs important excretory organs."},
+ {q:"Uremia is a medical emergency caused by:",o:["Excess glucose in blood","Toxic accumulation of urea and other waste in blood due to kidney failure","Dehydration only","Vitamin deficiency"],a:1,d:"m",e:"If both kidneys fail, urea, creatinine, K⁺ and acids accumulate in blood (uraemia), causing nausea, confusion, pericarditis, and potentially fatal cardiac arrhythmias."},
+ {q:"Kidney stones (renal calculi) are mainly composed of:",o:["Protein deposits","Calcium oxalate or calcium phosphate crystals","Uric acid only","Blood clots"],a:1,d:"m",e:"Most kidney stones (70–80%) are calcium oxalate. Risk factors include dehydration, high oxalate diet, hyperparathyroidism. They cause severe loin pain (renal colic) when passing."},
+ {q:"Renin is secreted by __ cells in response to __.",o:["Glomerular; high blood glucose","Juxtaglomerular; low blood pressure/volume","Distal tubule; high Na⁺","Collecting duct; high osmolarity"],a:1,d:"h",e:"Juxtaglomerular apparatus cells secrete renin when afferent arteriole pressure falls (or when Na⁺ is low). Renin initiates angiotensin II→aldosterone, raising BP and Na⁺ reabsorption."},
+ {q:"Daily urine output in healthy adults is approximately:",o:["100–200 mL","500 mL","1–1.5 L","5 L"],a:2,d:"m",e:"Normal urine output is ~1–1.5 L/day (varies with water intake, exercise, climate). Oliguria (<400 mL/day) or polyuria (>3 L/day) indicate possible kidney disorders."},
+ {q:"Plants excrete waste primarily by:",o:["Urinating","Storing resins, tannins, and crystals in vacuoles, bark, or shed leaves; releasing CO₂/O₂ through stomata","Excreting through root hairs only","Releasing urea into soil"],a:1,d:"m",e:"Plants store secondary metabolites (tannins, alkaloids, resins, calcium oxalate crystals) as metabolic waste in bark, vacuoles, or leaves shed seasonally. Gaseous wastes exit via stomata."},
+ {q:"Deamination removes __ from amino acids in the liver.",o:["Carboxyl groups","Amino groups (-NH₂), producing ammonia + keto acid","Carbon atoms","Hydrogen atoms"],a:1,d:"m",e:"Deamination: amino acid → keto acid (used for energy via gluconeogenesis or Krebs) + NH₃ (combined with CO₂ → urea in ornithine cycle). This is how nitrogen from protein is excreted."},
+ {q:"Suggestions for a person with complete kidney failure would include:",o:["Drink more water only","Haemodialysis or peritoneal dialysis to filter blood, or kidney transplant","Only dietary protein reduction","Antibiotics only"],a:1,d:"e",e:"Complete bilateral renal failure (end-stage renal disease) requires replacement therapy: haemodialysis (3×/week), continuous ambulatory peritoneal dialysis, or kidney transplant."},
+ {q:"The GFR (glomerular filtration rate) in healthy adults is approximately:",o:["1 L/day","18 L/day","125 mL/min (~180 L/day)","500 mL/day"],a:2,d:"h",e:"Normal GFR ≈125 mL/min = 180 L/day. Of this enormous filtrate, ~99% is reabsorbed; only ~1–1.5 L becomes urine, representing efficient selective reabsorption."},
+ {q:"Tubular secretion moves substances __ .",o:["From tubular fluid back into blood","From blood into tubular fluid (in addition to filtration)","From urine into the ureter","From the collecting duct backward"],a:1,d:"m",e:"Tubular secretion is the active transport of additional waste (drugs, H⁺, K⁺, creatinine) from peritubular capillaries into tubular lumen, supplementing filtration to increase excretion."},
+ {q:"In peritoneal dialysis, the __ is used as the dialysis membrane.",o:["Kidney itself","Patient's own peritoneal membrane (lining of abdominal cavity)","Semi-permeable synthetic membrane","Skin"],a:1,d:"h",e:"Dialysis fluid is infused into the peritoneal cavity; waste diffuses from blood through the peritoneum into the fluid, which is then drained. Can be performed at home continuously."},
+ {q:"Erythropoietin (EPO) is produced by the kidneys to:",o:["Control blood pressure only","Stimulate bone marrow to produce red blood cells","Regulate urine concentration","Control Na⁺ balance"],a:1,d:"h",e:"EPO is a hormone secreted by peritubular cells in the kidney cortex in response to hypoxia. It stimulates erythropoiesis in red bone marrow, increasing RBC count and O₂-carrying capacity."},
+ {q:"Counter-current exchange in the loop of Henle refers to:",o:["Blood and filtrate flowing in the same direction","Descending and ascending limbs having opposite flows creating a multiplied osmotic gradient","Two loops flowing in the same direction","Countercurrent exchange between arteries and veins"],a:1,d:"h",e:"Descending limb (water permeable) and ascending limb (Na⁺ active transport) flow in opposite directions. This countercurrent multiplier builds up high interstitial osmolarity in the medulla."},
+ {q:"Urinary incontinence refers to:",o:["Inability to produce urine","Involuntary leakage of urine due to loss of sphincter control","Presence of blood in urine","Excess urine production"],a:1,d:"m",e:"Urinary incontinence (involuntary urination) results from loss of voluntary control of the external urethral sphincter, due to nerve damage, pelvic floor weakness, or prostate issues."},
+ {q:"Proteinuria indicates:",o:["Normal kidney function","Glomerular membrane damage allowing large proteins (albumin) to be filtered into urine","High protein diet","Excess amino acid synthesis"],a:1,d:"m",e:"Healthy glomeruli retain plasma proteins. Proteinuria (protein in urine) signals damage to the glomerular basement membrane, as seen in diabetic nephropathy or glomerulonephritis."},
+ {q:"Antidiuretic hormone (ADH) is synthesised in the __ and released from __.",o:["Kidney; adrenal gland","Anterior pituitary; posterior pituitary","Hypothalamus; posterior pituitary","Adrenal cortex; kidney"],a:2,d:"h",e:"ADH (vasopressin) is produced by hypothalamic neurons and transported to the posterior pituitary for storage and release when blood osmolarity rises or blood pressure falls."},
+ {q:"Cortical nephrons vs. juxtamedullary nephrons:",o:["Both are identical","Juxtamedullary nephrons have longer loops of Henle reaching deep into medulla for greater urine concentration","Cortical nephrons are longer","Both are found in renal pelvis"],a:1,d:"h",e:"Juxtamedullary nephrons (~15%) have long loops of Henle extending deep into the medulla, generating a steep osmotic gradient — enabling production of very concentrated urine."},
+ {q:"Which organ is primarily responsible for detoxification of blood?",o:["Kidney","Spleen","Liver","Lungs"],a:2,d:"m",e:"The liver removes drugs, alcohol, bilirubin, ammonia, and other toxins from portal blood through oxidation, conjugation, and excretion into bile — a vital detoxification function."},
+ {q:"The renin-angiotensin-aldosterone system (RAAS) responds to:",o:["High blood glucose","Low blood pressure/volume or low Na⁺; results in raised BP and Na⁺ retention","High blood pressure","Excess K⁺"],a:1,d:"h",e:"Low renal perfusion → renin → angiotensinogen → angiotensin I → ACE → angiotensin II → vasoconstriction + aldosterone → Na⁺/water retention → restored BP and volume."},
+ {q:"Sweat contains which of the following?",o:["Glucose and proteins","Water, NaCl, trace urea, and lactic acid","Only water","Urea in large amounts like urine"],a:1,d:"m",e:"Sweat is mostly water (~99%) with dissolved NaCl, small amounts of urea, lactic acid and K⁺. It serves thermoregulation primarily; excretion is a minor secondary function."},
+ {q:"What is meant by tubular reabsorption?",o:["Secreting extra waste into tubular fluid","The recovery of useful substances (glucose, water, amino acids) from tubular filtrate back into blood","Filtering blood in the glomerulus","Producing urine in the collecting duct"],a:1,d:"e",e:"Tubular reabsorption moves valuable filtered substances (glucose, amino acids, electrolytes, water) from the tubular lumen back across tubular cells into peritubular capillaries."},
+ {q:"Which acid-base function do kidneys serve?",o:["Only excretion of urea","Regulating blood pH by excreting H⁺ or HCO₃⁻ as needed","Only regulating Na⁺","Only regulating K⁺"],a:1,d:"h",e:"Kidneys maintain blood pH 7.35–7.45 by: secreting H⁺ (when acidic), reabsorbing HCO₃⁻ (when alkaline), and producing ammonium to buffer excreted acid."},
+ {q:"The experiment to show kidney's filtration function uses iodine to detect:",o:["CO₂ in urine","Presence of glucose in urine (absence normally)","Starch – absent from filtrate confirming size-based filtration","Protein in urine – absent normally"],a:2,d:"h",e:"Iodine is sometimes used in classroom models to show selective filtration — large starch molecules don't pass through semi-permeable membranes, unlike small glucose molecules."},
+ {q:"Dialysis fluid in haemodialysis contains:",o:["High urea to draw urea from blood","Normal plasma concentrations of glucose and electrolytes (so only waste diffuses out)","No glucose, to remove all glucose","High K⁺ to replace lost potassium"],a:1,d:"h",e:"Dialysis fluid (dialysate) has normal plasma concentrations of useful solutes; waste products (urea, creatinine, excess K⁺) diffuse out from blood down concentration gradients, while glucose and electrolytes are retained."},
+],
+
+/* ─────────────────── CHAPTER 5 : CONTROL & COORDINATION ─────────────────── */
+5:[
+ {q:"The basic structural and functional unit of the nervous system is the:",o:["Synapse","Axon","Neuron (nerve cell)","Spinal cord"],a:2,d:"e",e:"Neurons are specialised cells that receive, process and transmit electrochemical signals. They have a cell body, dendrites (input) and axon (output)."},
+ {q:"Dendrites of a neuron:",o:["Carry impulses away from the cell body","Insulate the axon","Receive incoming signals and conduct them toward the cell body","Form myelin sheath"],a:2,d:"e",e:"Dendrites are branched extensions of the cell body that receive signals from other neurons or sensory receptors and conduct them toward the cell body for integration."},
+ {q:"The myelin sheath around an axon is formed by __ cells in the PNS.",o:["Astrocytes","Schwann cells","Oligodendrocytes","Microglia"],a:1,d:"m",e:"Schwann cells wrap around peripheral nerve axons, forming the myelin sheath. Myelin (high lipid content) insulates the axon and dramatically speeds up impulse conduction via saltatory conduction."},
+ {q:"A synapse is:",o:["A node of Ranvier","The junction between two neurons (or neuron and effector) where signals are transmitted chemically","A type of receptor","The gap between dendrites and cell body"],a:1,d:"e",e:"At a synapse, an action potential in the pre-synaptic neuron triggers neurotransmitter release into the synaptic cleft; neurotransmitters bind post-synaptic receptors, continuing or inhibiting the signal."},
+ {q:"A reflex action is characterised by being:",o:["Slow and voluntary","Fast, involuntary and not requiring conscious thought — processed in spinal cord","Controlled only by the cerebrum","Requiring learning"],a:1,d:"e",e:"Spinal reflexes (withdrawal, knee-jerk) bypass the brain — receptor → sensory neuron → interneuron in spinal cord → motor neuron → effector. Speed (~20 ms) far exceeds conscious response."},
+ {q:"The correct path in a reflex arc is:",o:["Receptor→Motor neuron→CNS→Sensory neuron→Effector","Receptor→Sensory neuron→CNS interneuron→Motor neuron→Effector","Brain→Motor neuron→Receptor","Effector→Motor neuron→Brain"],a:1,d:"e",e:"Reflex arc: Stimulus→Receptor→Sensory (afferent) neuron→Interneuron (spinal cord)→Motor (efferent) neuron→Effector (muscle/gland). The brain is informed but does not initiate the response."},
+ {q:"The cerebellum is primarily responsible for:",o:["Thinking and memory","Regulating heart rate","Coordination of muscular movement, balance and posture","Secreting hormones"],a:2,d:"e",e:"The cerebellum receives proprioceptive, vestibular and visual input, fine-tuning motor commands from the cerebrum to ensure smooth, precise, coordinated movement and balance."},
+ {q:"The medulla oblongata controls:",o:["Higher cognitive functions","Voluntary movement","Vital involuntary functions — breathing rate, heart rate, blood pressure","Hormone secretion only"],a:2,d:"m",e:"The medulla (lower brainstem) contains cardiac, respiratory and vasomotor centres regulating autonomic functions. Damage to the medulla is rapidly fatal."},
+ {q:"Phototropism in plants refers to growth in response to:",o:["Gravity","Water","Light","Touch"],a:2,d:"e",e:"Phototropism: shoots grow toward light (positive phototropism) due to auxin redistributing away from the illuminated side, causing greater elongation on the shaded side."},
+ {q:"Auxin (IAA) promotes:",o:["Leaf fall","Cell elongation at the site of application (low concentration)","Root elongation at high concentration","Fruit ripening"],a:1,d:"m",e:"Auxin at low concentrations stimulates cell elongation by loosening cell walls, enabling water uptake and expansion. High concentrations actually inhibit growth (especially in roots)."},
+ {q:"Roots show positive geotropism, meaning they grow:",o:["Toward light","Away from gravity (upward)","Toward gravity (downward)","Toward water only"],a:2,d:"e",e:"Root cap cells are more sensitive to auxin — high auxin on the lower side (due to gravity) inhibits root elongation there, so the lower side grows less → roots bend downward."},
+ {q:"The pituitary gland is called the 'master gland' because:",o:["It is the largest endocrine gland","It secretes tropic hormones controlling most other endocrine glands","It produces insulin","It regulates only growth"],a:1,d:"m",e:"The anterior pituitary secretes TSH (thyroid), ACTH (adrenal cortex), FSH/LH (gonads), GH (growth), and prolactin. The posterior pituitary releases ADH and oxytocin (made in hypothalamus)."},
+ {q:"Insulin is produced by __ cells of the pancreatic islets and:",o:["Alpha cells; raises blood glucose","Beta cells; lowers blood glucose by promoting cellular uptake and glycogen synthesis","Delta cells; digests proteins","Acinar cells; secretes digestive enzymes"],a:1,d:"m",e:"Beta cells (β-cells) in the islets of Langerhans secrete insulin when blood glucose rises. Insulin promotes glucose uptake into cells and glycogen synthesis in liver/muscle."},
+ {q:"Glucagon is secreted by __ cells and:",o:["Beta cells; lowers blood glucose","Alpha cells; raises blood glucose by stimulating glycogenolysis and gluconeogenesis","Delta cells; lowers blood pressure","Acinar cells; aids digestion"],a:1,d:"m",e:"Alpha (α) cells secrete glucagon when blood glucose falls. Glucagon binds liver receptors → cAMP → glycogenolysis (glycogen→glucose) + gluconeogenesis → blood glucose rises."},
+ {q:"Thyroxine (T4) is produced by the thyroid gland and:",o:["Lowers metabolic rate","Regulates basal metabolic rate, growth, and brain development; requires dietary iodine","Raises blood glucose","Controls calcium metabolism only"],a:1,d:"m",e:"Thyroxine accelerates metabolism in virtually all cells. It is essential for normal growth, brain development (critical in neonates), and thermoregulation. Synthesis requires 4 iodine atoms."},
+ {q:"Iodine deficiency causes:",o:["Diabetes mellitus","Cushing's syndrome","Goitre (enlargement of thyroid gland)","Addison's disease"],a:2,d:"e",e:"Without iodine, thyroxine cannot be synthesised. Persistent TSH stimulation (pituitary trying to stimulate inadequate thyroid) causes thyroid hypertrophy → visible neck swelling (goitre)."},
+ {q:"Adrenaline (epinephrine) is secreted by the __ and prepares the body for:",o:["Thyroid; sleep","Adrenal cortex; digestion","Adrenal medulla; fight-or-flight response","Pancreas; protein synthesis"],a:2,d:"m",e:"Adrenaline (from adrenal medulla) rapidly increases heart rate, blood pressure, blood glucose and blood flow to muscles — the 'fight-or-flight' (sympathoadrenal) stress response."},
+ {q:"The touch-me-not plant (Mimosa pudica) closing its leaflets when touched is an example of:",o:["Phototropism","Thigmotropism","Thigmonasty (non-directional nastic response to touch)","Hydrotropism"],a:2,d:"m",e:"Mimosa's rapid leaf folding is thigmonasty — a non-directional nastic movement. Potassium ions leave motor cells at the leaf pulvinus, reducing turgor pressure and causing leaflet collapse."},
+ {q:"Geotropism (gravitropism) in plants is a growth response to:",o:["Light direction","Water availability","Gravity","Temperature"],a:2,d:"e",e:"Geotropism is the directional growth response to gravity. Roots: positive geotropism (grow down). Shoots: negative geotropism (grow up). Auxin redistribution by gravity mediates both."},
+ {q:"The autonomic nervous system (ANS) controls:",o:["Voluntary skeletal muscle movement","Involuntary smooth muscle, cardiac muscle and gland secretion","Conscious thought","Sensory perception"],a:1,d:"m",e:"The ANS (sympathetic + parasympathetic divisions) regulates heart rate, blood pressure, digestion, pupil size, and glandular secretion — all below the level of conscious control."},
+ {q:"The hypothalamus links the nervous and endocrine systems by:",o:["Directly producing insulin","Secreting releasing/inhibiting hormones that control anterior pituitary, and producing ADH/oxytocin","Controlling muscle movement","Being the site of reflex arcs"],a:1,d:"h",e:"The hypothalamus integrates neural and hormonal signals: it produces releasing/inhibiting factors (→ anterior pituitary) and synthesises ADH/oxytocin (stored in posterior pituitary)."},
+ {q:"Growth hormone (GH) deficiency in childhood causes:",o:["Gigantism","Cretinism","Pituitary dwarfism — normal proportions but reduced stature","Acromegaly"],a:2,d:"m",e:"Insufficient GH in childhood slows linear bone growth → proportionate short stature (pituitary dwarfism). Excess GH in childhood causes gigantism; excess in adults causes acromegaly."},
+ {q:"The resting membrane potential of a typical neuron is approximately:",o:["+70 mV","-40 mV","-70 mV","0 mV"],a:2,d:"h",e:"At rest, the inside of a neuron is ~−70 mV relative to the outside, maintained by Na⁺/K⁺-ATPase (pumps 3 Na⁺ out, 2 K⁺ in) and differential membrane permeability."},
+ {q:"An action potential is triggered when the membrane potential reaches:",o:["−70 mV (resting)","Threshold (~−55 mV), causing rapid depolarisation","0 mV only","+ 70 mV"],a:1,d:"h",e:"When depolarisation reaches threshold (≈−55 mV), voltage-gated Na⁺ channels open, rapid Na⁺ influx depolarises membrane to +30–40 mV (the all-or-none action potential)."},
+ {q:"Acetylcholine is a neurotransmitter released at:",o:["Adrenergic synapses in the sympathetic NS","Neuromuscular junctions and many CNS and parasympathetic synapses","Only within the brain","Only in pain fibres"],a:1,d:"m",e:"ACh is released by motor neurons at the neuromuscular junction (causes muscle contraction), at most parasympathetic post-ganglionic synapses, and many brain synapses."},
+ {q:"The sympathetic nervous system, when activated, causes:",o:["Slowing of heart rate","Increased digestion and salivation","Fight-or-flight: increased HR, dilation of airways, raised blood glucose, reduced digestion","Pupil constriction"],a:2,d:"m",e:"Sympathetic activation prepares the body for emergency: ↑HR, ↑BP, dilated bronchioles and pupils, vasoconstriction in gut, vasodilatation in skeletal muscle, glycogenolysis."},
+ {q:"The parasympathetic nervous system promotes:",o:["Fight-or-flight responses","Rest and digest: slowed heart rate, increased digestion, pupil constriction","Release of adrenaline","Increased blood glucose"],a:1,d:"m",e:"Parasympathetic ('rest and digest') dominates at rest: slows heart via vagus nerve, promotes gut motility/secretion, constricts pupils, lowers blood pressure, promotes urination."},
+ {q:"Gibberellin promotes:",o:["Fruit drop","Stomatal closure under drought","Stem elongation and seed germination by breaking dormancy","Root growth only"],a:2,d:"m",e:"Gibberellins stimulate internode elongation (stem growth), mobilise starch reserves in germinating seeds (via α-amylase induction), and can promote fruit development."},
+ {q:"Abscisic acid (ABA) is the 'stress hormone' in plants because:",o:["It promotes growth","It closes stomata during water stress and promotes seed/bud dormancy","It causes fruit ripening","It promotes cell division"],a:1,d:"m",e:"ABA accumulates under drought: it triggers rapid stomatal closure (guard cell K⁺ efflux → water loss → flaccid), slows metabolism, and promotes dormancy — conserving water and energy."},
+ {q:"Ethylene (ethene) plant hormone:",o:["Promotes seed dormancy","Inhibits fruit ripening","Promotes fruit ripening, leaf/fruit abscission, and inhibits elongation growth","Only promotes cell division"],a:2,d:"m",e:"Ethylene (gaseous hormone) triggers: fruit ripening (colour, softening), leaf and fruit abscission, and senescence. It inhibits stem elongation. Used commercially to ripen bananas."},
+ {q:"Cytokinin plant hormone promotes:",o:["Leaf yellowing (senescence)","Stomatal closure","Cell division (cytokinesis) and delays leaf senescence","Root elongation only"],a:2,d:"m",e:"Cytokinins (kinetin, zeatin) promote cell division and differentiation, delay chlorophyll degradation (anti-senescence), and in tissue culture are used to induce shoot formation."},
+ {q:"The all-or-none law of nerve impulse means:",o:["Nerves fire at variable strengths","Once threshold is reached, a full-sized action potential fires; below threshold, nothing fires","Different neurons have different-sized impulses","Impulse size depends on stimulus intensity"],a:1,d:"h",e:"All-or-none: a stimulus either fails to reach threshold (no impulse) or exceeds it (full action potential of standard amplitude). Stimulus intensity is encoded by frequency, not impulse size."},
+ {q:"The cerebrum controls:",o:["Heart rate only","Balance and coordination","Conscious thought, memory, voluntary movement, sensory perception, language, personality","Breathing only"],a:2,d:"m",e:"The cerebral cortex (two hemispheres, four lobes each) is responsible for all higher brain functions: reasoning, memory, emotions, voluntary motor control, and sensory integration."},
+ {q:"Node of Ranvier in myelinated axons enables:",o:["Neurotransmitter storage","Saltatory conduction — impulse 'jumps' from node to node, greatly increasing speed","Myelin synthesis","Synapse formation"],a:1,d:"h",e:"Myelin insulates the axon between nodes. Depolarisation skips from node to node (saltatory = jumping), increasing conduction velocity from ~0.5 m/s (unmyelinated) to ~80–120 m/s."},
+ {q:"Hydrotropism is a plant growth response toward:",o:["Light","Gravity","Water","Touch"],a:2,d:"e",e:"Hydrotropism: roots grow toward higher moisture gradients in soil. This helps plants locate water efficiently — especially important in dry or uneven water-distribution conditions."},
+ {q:"Which hormone raises blood calcium levels?",o:["Calcitonin (lowers it)","Parathyroid hormone (PTH) — raises blood Ca²⁺","Thyroxine","Glucagon"],a:1,d:"h",e:"PTH (parathyroid gland) raises blood Ca²⁺ by stimulating bone resorption (osteoclasts), increasing renal Ca²⁺ reabsorption, and activating vitamin D for intestinal Ca²⁺ absorption."},
+ {q:"Dopamine is a neurotransmitter associated with:",o:["Muscle contraction only","The reward and pleasure pathway; deficiency in Parkinson's disease","Pain suppression only","Cardiac regulation only"],a:1,d:"h",e:"Dopamine (produced in substantia nigra and VTA) mediates reward, motivation, and fine motor control. Its deficiency causes Parkinson's tremors and rigidity; excess relates to schizophrenia."},
+ {q:"The thalamus acts as:",o:["The emotional centre","A relay station routing all sensory information (except smell) to appropriate cortical areas","The pituitary regulator","A centre for involuntary reflexes"],a:1,d:"h",e:"The thalamus is the brain's sensory gateway — all sensory inputs (visual, auditory, somatosensory) synapse in thalamic nuclei before relay to the appropriate primary cortical area."},
+ {q:"Nastic movements in plants are __ directional stimuli.",o:["Responses to directional stimuli","Responses to non-directional stimuli — direction of movement independent of stimulus direction","Growth responses only","Driven by auxin redistribution"],a:1,d:"m",e:"Nastic movements (thigmonasty in Mimosa, photonasty in daisies) are responses to non-directional stimuli. The direction of response is determined by plant anatomy, not stimulus direction."},
+ {q:"The hypothalamus regulates body temperature by:",o:["Directly contracting muscles","Acting as a thermostat — detecting blood temperature deviation and triggering heat loss (sweating, vasodilation) or heat gain (shivering, vasoconstriction)","Secreting insulin","Controlling breathing rate only"],a:1,d:"m",e:"Anterior hypothalamus (heat loss) triggers sweating and cutaneous vasodilation when body temperature rises. Posterior hypothalamus (heat conservation) triggers shivering and vasoconstriction when cold."},
+ {q:"Feedback inhibition in the endocrine system means:",o:["Hormones always increase production of other hormones","When hormone levels reach the target, they inhibit the releasing signal, maintaining homeostasis","Hormones never stop being secreted","Positive feedback always occurs"],a:1,d:"m",e:"Negative feedback: high thyroxine → inhibits TSH from pituitary and TRH from hypothalamus → less stimulation of thyroid → thyroxine falls → inhibition lifts. Classic homeostatic loop."},
+ {q:"Serotonin deficiency in the brain is associated with:",o:["Parkinson's disease","Depression and mood disorders","Hyperthyroidism","Diabetes"],a:1,d:"h",e:"Serotonin (5-HT) regulates mood, sleep, appetite, and social behaviour. Its depletion is linked to major depression, anxiety, and OCD. SSRIs raise synaptic serotonin levels."},
+ {q:"Cortisol (glucocorticoid) is released from the adrenal cortex in response to:",o:["Low blood glucose only","Stress (via CRH→ACTH pathway) and maintains blood glucose, suppresses immune response","Exercise only","Excess calcium"],a:1,d:"h",e:"ACTH from the pituitary stimulates adrenal cortex to release cortisol. Cortisol promotes gluconeogenesis, fat mobilisation, and anti-inflammatory effects — a sustained stress response."},
+ {q:"In plants, auxin is produced mainly in:",o:["Root tips only","Shoot apical meristems and young leaves — then transported to elongation zones","Old leaves","Flowers only"],a:1,d:"m",e:"IAA is synthesised from tryptophan in shoot apex and young leaves. Polar auxin transport (PAT) moves it basipetally (downward in shoots), controlling elongation, apical dominance, and tropisms."},
+ {q:"Apical dominance is caused by:",o:["High cytokinin in shoot tip","High auxin from shoot apex suppressing growth of lateral buds","High gibberellin in roots","Low ABA"],a:1,d:"h",e:"Auxin produced at the shoot apex moves down and inhibits outgrowth of lateral (axillary) buds — apical dominance. Removing the apex removes auxin source → lateral buds grow (bushy plant)."},
+ {q:"The 'knee-jerk reflex' involves the patellar tendon being struck, which:",o:["Travels to the brain and back","Directly activates a 2-neuron reflex arc (sensory→motor) in the spinal cord with no interneuron","Requires 5 neuron connections","Is controlled by the cerebellum"],a:1,d:"h",e:"The patellar reflex is monosynaptic: tendon stretch → muscle spindle → Ia afferent → directly synapse on alpha motor neuron in spinal cord → quadriceps contracts. No interneuron required."},
+ {q:"Which division of the nervous system controls voluntary skeletal muscle movement?",o:["Autonomic nervous system","Parasympathetic division","Somatic (voluntary) nervous system","Sympathetic division"],a:2,d:"m",e:"The somatic nervous system comprises afferent sensory neurons and efferent motor neurons controlling voluntary skeletal muscles, under conscious control (e.g. walking, writing, speaking)."},
+]
+};
+
+/* ════════════════════════════════════════════════════════
+   STATE
+════════════════════════════════════════════════════════ */
+const state = {};   // keyed by chapter id
+function initChState(cid) {
+  const qs = QUIZ[cid];
+  state[cid] = {
+    order: [...Array(qs.length).keys()],
+    answers: new Array(qs.length).fill(null), // null | true | false
+    userPicks: new Array(qs.length).fill(null),
+    current: 0,
+    mode: 'seq',
+    done: false
+  };
+}
+CHAPTERS.forEach(c => initChState(c.id));
+
+/* ════════════════════════════════════════════════════════
+   LOGO INJECTION
+════════════════════════════════════════════════════════ */
+document.getElementById('siteLogo').src = 'data:image/jpeg;base64,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';
+
+/* ════════════════════════════════════════════════════════
+   BUILD TABS
+════════════════════════════════════════════════════════ */
+let activeChapter = 1;
+const tabBar = document.getElementById('tabBar');
+CHAPTERS.forEach(ch => {
+  const btn = document.createElement('button');
+  btn.className = 'tab-btn' + (ch.id === 1 ? ' active' : '');
+  btn.id = `tab-${ch.id}`;
+  btn.innerHTML = `<span class="tab-num">${ch.id < 10 ? '0'+ch.id : ch.id}</span>${ch.icon} ${ch.name}<span class="tab-check">✓</span>`;
+  btn.onclick = () => switchChapter(ch.id);
+  tabBar.appendChild(btn);
+});
+
+/* ════════════════════════════════════════════════════════
+   BUILD CHAPTER PANELS
+════════════════════════════════════════════════════════ */
+const mainContent = document.getElementById('mainContent');
+CHAPTERS.forEach(ch => {
+  const panel = document.createElement('div');
+  panel.className = `chapter-panel ch-${ch.id}` + (ch.id === 1 ? ' active' : '');
+  panel.id = `panel-${ch.id}`;
+
+  panel.innerHTML = `
+    <div class="ch-intro" id="intro-${ch.id}">
+      <div class="ch-intro-top">
+        <div class="ch-icon-big">${ch.icon}</div>
+        <div>
+          <div class="ch-name">Chapter ${ch.id}: ${ch.name}</div>
+          <div class="ch-tagline">${ch.tagline}</div>
+        </div>
+      </div>
+      <div class="ch-meta-row">
+        <span class="ch-meta-pill">📝 50 Questions</span>
+        <span class="ch-meta-pill" id="meta-diff-${ch.id}">🟢 Easy · 🟡 Medium · 🔴 Hard</span>
+        <span class="ch-meta-pill">⌨️ 1–4 keys to answer</span>
+      </div>
+    </div>
+
+    <div class="stats-row" id="stats-${ch.id}">
+      <div class="stat-chip">
+        <div class="stat-num" id="sn-total-${ch.id}">50</div>
+        <div class="stat-lbl">Total</div>
+      </div>
+      <div class="stat-chip">
+        <div class="stat-num" id="sn-ans-${ch.id}" style="color:var(--muted)">0</div>
+        <div class="stat-lbl">Answered</div>
+      </div>
+      <div class="stat-chip">
+        <div class="stat-num" id="sn-cor-${ch.id}" style="color:var(--correct)">0</div>
+        <div class="stat-lbl">Correct ✓</div>
+      </div>
+      <div class="stat-chip">
+        <div class="stat-num" id="sn-wrg-${ch.id}" style="color:var(--wrong)">0</div>
+        <div class="stat-lbl">Wrong ✗</div>
+      </div>
+    </div>
+
+    <div class="progress-label">
+      <span id="plbl-${ch.id}">Progress</span>
+      <span id="ppct-${ch.id}">0 / 50</span>
+    </div>
+    <div class="progress-strip">
+      <div class="progress-fill" id="pfill-${ch.id}" style="width:0%"></div>
+    </div>
+
+    <div class="filter-bar">
+      <button class="filter-btn active-filter" onclick="setFilter(${ch.id},'all',this)">All</button>
+      <button class="filter-btn" onclick="setFilter(${ch.id},'unanswered',this)">Unanswered</button>
+      <button class="filter-btn" onclick="setFilter(${ch.id},'wrong',this)">Wrong</button>
+      <button class="filter-btn" onclick="setFilter(${ch.id},'correct',this)">Correct</button>
+    </div>
+
+    <div class="dot-nav" id="dots-${ch.id}"></div>
+
+    <div id="qarea-${ch.id}"></div>
+
+    <div class="result-panel" id="result-${ch.id}"></div>
+
+    <div class="controls">
+      <button class="btn btn-primary" id="btn-prev-${ch.id}" onclick="navigate(${ch.id},-1)">← Prev</button>
+      <button class="btn btn-primary" id="btn-next-${ch.id}" onclick="navigate(${ch.id},1)">Next →</button>
+      <button class="btn btn-ghost" onclick="toggleShuffle(${ch.id})">🔀 Shuffle</button>
+      <button class="btn btn-danger" onclick="resetChapter(${ch.id})">↺ Reset</button>
+      <button class="btn btn-ghost" onclick="showResults(${ch.id})">📊 Results</button>
+    </div>
+    <div class="kbd-hint">Keyboard: ← → navigate &nbsp;|&nbsp; 1 2 3 4 = options &nbsp;|&nbsp; Space = next</div>
+  `;
+  mainContent.appendChild(panel);
+});
+
+/* ════════════════════════════════════════════════════════
+   RENDER QUESTION
+════════════════════════════════════════════════════════ */
+function renderQuestion(cid) {
+  const s = state[cid];
+  const qi = s.order[s.current];
+  const qd = QUIZ[cid][qi];
+  const answered = s.answers[qi] !== null;
+  const isCorrect = s.answers[qi] === true;
+  const userPick = s.userPicks[qi];
+
+  const keys = ['A','B','C','D'];
+  let optsHtml = qd.o.map((opt, oi) => {
+    let cls = 'opt';
+    if (answered) {
+      if (oi === qd.a) cls += ' correct-opt';
+      else if (oi === userPick && oi !== qd.a) cls += ' wrong-opt';
+    }
+    return `<button class="${cls}" ${answered ? 'disabled' : ''} onclick="answer(${cid},${qi},${oi})">
+      <span class="opt-key">${keys[oi]}</span><span>${opt}</span>
+    </button>`;
+  }).join('');
+
+  const diffCls = {e:'diff-e',m:'diff-m',h:'diff-h'}[qd.d] || 'diff-e';
+  const diffLabel = {e:'Easy',m:'Medium',h:'Hard'}[qd.d];
+  const statusIcon = answered ? (isCorrect ? '✅' : '❌') : '';
+
+  let expCls = '', expLabel = '';
+  if (answered) {
+    expCls = isCorrect ? 'exp-correct' : 'exp-wrong';
+    expLabel = isCorrect ? '✅ Correct!' : '❌ Incorrect';
+  }
+
+  const cardCls = answered ? (isCorrect ? 'answered-correct' : 'answered-wrong') : '';
+
+  document.getElementById(`qarea-${cid}`).innerHTML = `
+    <div class="q-card ${cardCls}">
+      <div class="q-top">
+        <span class="q-num-badge">Q${s.current + 1} / 50</span>
+        <span class="q-diff ${diffCls}">${diffLabel}</span>
+        <span class="q-status-icon">${statusIcon}</span>
+      </div>
+      <div class="q-text">${qd.q}</div>
+      <div class="options">${optsHtml}</div>
+      <div class="explanation ${expCls} ${answered ? 'show' : ''}">
+        <span class="exp-label">${expLabel}</span>${qd.e}
+      </div>
+    </div>`;
+
+  updateStats(cid);
+  renderDots(cid);
+  updateNav(cid);
+}
+
+/* ════════════════════════════════════════════════════════
+   ANSWER
+════════════════════════════════════════════════════════ */
+function answer(cid, qi, optIdx) {
+  const s = state[cid];
+  if (s.answers[qi] !== null) return;
+  s.userPicks[qi] = optIdx;
+  s.answers[qi] = optIdx === QUIZ[cid][qi].a;
+  renderQuestion(cid);
+}
+
+/* ════════════════════════════════════════════════════════
+   NAVIGATE
+════════════════════════════════════════════════════════ */
+function navigate(cid, dir) {
+  const s = state[cid];
+  s.current = Math.max(0, Math.min(s.order.length - 1, s.current + dir));
+  renderQuestion(cid);
+  window.scrollTo({top: document.querySelector('.tab-bar').getBoundingClientRect().bottom + window.scrollY - 10, behavior:'smooth'});
+}
+
+function updateNav(cid) {
+  const s = state[cid];
+  document.getElementById(`btn-prev-${cid}`).disabled = s.current === 0;
+  document.getElementById(`btn-next-${cid}`).disabled = s.current === s.order.length - 1;
+}
+
+/* ════════════════════════════════════════════════════════
+   STATS & PROGRESS
+════════════════════════════════════════════════════════ */
+function updateStats(cid) {
+  const s = state[cid];
+  const total = QUIZ[cid].length;
+  const answered = s.answers.filter(a => a !== null).length;
+  const correct = s.answers.filter(a => a === true).length;
+  const wrong = s.answers.filter(a => a === false).length;
+  const pct = Math.round(answered / total * 100);
+
+  document.getElementById(`sn-ans-${cid}`).textContent = answered;
+  document.getElementById(`sn-cor-${cid}`).textContent = correct;
+  document.getElementById(`sn-wrg-${cid}`).textContent = wrong;
+  document.getElementById(`pfill-${cid}`).style.width = pct + '%';
+  document.getElementById(`ppct-${cid}`).textContent = `${answered} / ${total}`;
+
+  // global pill
+  let ga = 0, gt = 0;
+  CHAPTERS.forEach(ch => {
+    gt += QUIZ[ch.id].length;
+    ga += state[ch.id].answers.filter(a => a !== null).length;
+  });
+  document.getElementById('globalPill').textContent = `${ga} / ${gt} Answered`;
+
+  // mark tab as done
+  if (answered === total) {
+    document.getElementById(`tab-${cid}`)?.classList.add('done');
+  }
+}
+
+/* ════════════════════════════════════════════════════════
+   DOT NAV
+════════════════════════════════════════════════════════ */
+function renderDots(cid) {
+  const s = state[cid];
+  const container = document.getElementById(`dots-${cid}`);
+  container.innerHTML = '';
+  QUIZ[cid].forEach((_, qi) => {
+    const dot = document.createElement('button');
+    dot.className = 'dot';
+    const ans = s.answers[qi];
+    if (ans === true) dot.classList.add('dot-correct');
+    else if (ans === false) dot.classList.add('dot-wrong');
+    const posInOrder = s.order.indexOf(qi);
+    if (posInOrder === s.current) dot.classList.add('dot-current');
+    dot.title = `Q${qi + 1}`;
+    dot.onclick = () => {
+      const pos = s.order.indexOf(qi);
+      if (pos !== -1) { s.current = pos; renderQuestion(cid); }
+    };
+    container.appendChild(dot);
+  });
+}
+
+/* ════════════════════════════════════════════════════════
+   FILTER
+════════════════════════════════════════════════════════ */
+function setFilter(cid, type, btn) {
+  document.querySelectorAll(`#panel-${cid} .filter-btn`).forEach(b => b.classList.remove('active-filter'));
+  btn.classList.add('active-filter');
+  const s = state[cid];
+  const allIdx = [...Array(QUIZ[cid].length).keys()];
+  if (type === 'all') s.order = allIdx;
+  else if (type === 'unanswered') s.order = allIdx.filter(i => s.answers[i] === null);
+  else if (type === 'wrong') s.order = allIdx.filter(i => s.answers[i] === false);
+  else if (type === 'correct') s.order = allIdx.filter(i => s.answers[i] === true);
+  if (s.order.length === 0) s.order = allIdx;
+  s.current = 0;
+  renderQuestion(cid);
+}
+
+/* ════════════════════════════════════════════════════════
+   SHUFFLE
+════════════════════════════════════════════════════════ */
+function toggleShuffle(cid) {
+  const s = state[cid];
+  const arr = [...s.order];
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  s.order = arr;
+  s.current = 0;
+  renderQuestion(cid);
+}
+
+/* ════════════════════════════════════════════════════════
+   RESULTS
+════════════════════════════════════════════════════════ */
+function showResults(cid) {
+  const s = state[cid];
+  const total = QUIZ[cid].length;
+  const correct = s.answers.filter(a => a === true).length;
+  const wrong = s.answers.filter(a => a === false).length;
+  const skip = s.answers.filter(a => a === null).length;
+  const pct = Math.round(correct / total * 100);
+  const grade = pct >= 90 ? ['A+','Outstanding! 🏆'] : pct >= 75 ? ['A','Excellent! 🎉'] :
+                pct >= 60 ? ['B','Good work! 👍'] : pct >= 45 ? ['C','Keep going! 📚'] : ['D','More practice needed 💪'];
+  const rp = document.getElementById(`result-${cid}`);
+  rp.innerHTML = `
+    <div class="result-pct">${pct}%</div>
+    <div class="result-grade">Grade ${grade[0]} — ${grade[1]}</div>
+    <div class="result-stats-row">
+      <div class="r-stat"><div class="r-stat-n" style="color:var(--correct)">${correct}</div><div class="r-stat-l">✅ Correct</div></div>
+      <div class="r-stat"><div class="r-stat-n" style="color:var(--wrong)">${wrong}</div><div class="r-stat-l">❌ Wrong</div></div>
+      <div class="r-stat"><div class="r-stat-n" style="color:var(--muted)">${skip}</div><div class="r-stat-l">⏭ Skipped</div></div>
+      <div class="r-stat"><div class="r-stat-n">${total}</div><div class="r-stat-l">📝 Total</div></div>
+    </div>`;
+  rp.classList.add('show');
+  rp.scrollIntoView({behavior:'smooth', block:'nearest'});
+}
+
+/* ════════════════════════════════════════════════════════
+   RESET
+════════════════════════════════════════════════════════ */
+function resetChapter(cid) {
+  initChState(cid);
+  document.getElementById(`result-${cid}`).classList.remove('show');
+  document.getElementById(`result-${cid}`).innerHTML = '';
+  document.getElementById(`tab-${cid}`)?.classList.remove('done');
+  document.querySelectorAll(`#panel-${cid} .filter-btn`).forEach((b,i) => {
+    b.classList.toggle('active-filter', i === 0);
+  });
+  renderQuestion(cid);
+}
+
+/* ════════════════════════════════════════════════════════
+   SWITCH CHAPTER
+════════════════════════════════════════════════════════ */
+function switchChapter(cid) {
+  activeChapter = cid;
+  document.querySelectorAll('.chapter-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active'));
+  document.getElementById(`panel-${cid}`).classList.add('active');
+  document.getElementById(`tab-${cid}`).classList.add('active');
+  // set accent css var on panel
+  document.getElementById(`panel-${cid}`).style.setProperty('--accent', `var(--ch${cid})`);
+  window.scrollTo({top: 0, behavior:'smooth'});
+}
+
+/* ════════════════════════════════════════════════════════
+   KEYBOARD
+════════════════════════════════════════════════════════ */
+document.addEventListener('keydown', e => {
+  const cid = activeChapter;
+  const s = state[cid];
+  const qi = s.order[s.current];
+  if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); navigate(cid, 1); }
+  if (e.key === 'ArrowLeft') { e.preventDefault(); navigate(cid, -1); }
+  if (['1','2','3','4'].includes(e.key)) {
+    if (s.answers[qi] === null) answer(cid, qi, parseInt(e.key) - 1);
+  }
+});
+
+/* ════════════════════════════════════════════════════════
+   SCROLL-TO-TOP BUTTON
+════════════════════════════════════════════════════════ */
+window.addEventListener('scroll', () => {
+  document.getElementById('scrollTop').classList.toggle('show', window.scrollY > 400);
+});
+
+/* ════════════════════════════════════════════════════════
+   INIT
+════════════════════════════════════════════════════════ */
+CHAPTERS.forEach(ch => {
+  renderQuestion(ch.id);
+  document.getElementById(`panel-${ch.id}`).style.setProperty('--accent', `var(--ch${ch.id})`);
+});
+</script>
+</body>
+</html>
